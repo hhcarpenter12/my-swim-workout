@@ -75,8 +75,7 @@ export class AppComponent implements OnInit {
   eventDistanceType = "SCY";
   splitDistanceType = "SCY";
 
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator,  {static: false}) paginator: MatPaginator;
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;

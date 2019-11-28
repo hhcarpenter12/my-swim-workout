@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {InMemoryWebApiModule} from 'angular-in-memory-web-api';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,7 +17,13 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MultiAlertsComponent } from './multi-alerts';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
+
+const appRoutes: Routes = [
+  { path: '',
+    redirectTo: '/SwimWorkoutCreator',
+    pathMatch: 'full'
+  },
+];
 
 @NgModule({
   declarations: [
@@ -37,20 +42,11 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
     RouterModule.forRoot(
       appRoutes
     ),
-    PdfViewerModule,
     MatIconModule,
     AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-
-const appRoutes: Routes = [
-  { path: '',
-    redirectTo: '/SwimWorkoutCreator',
-    pathMatch: 'full'
-  },
-];
-
 
 export class AppModule { }
