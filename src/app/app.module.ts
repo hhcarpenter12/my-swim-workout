@@ -1,8 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { AppComponent } from './app.component';
+
+const appRoutes: Routes = [
+
+  { path: '',
+    redirectTo: '/my-swim-workout',
+    pathMatch: 'full'
+  },
+];
+
 
 @NgModule({
   declarations: [
@@ -10,19 +18,11 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-      RouterModule.forRoot(
-        appRoutes)
-      // other imports here
+    RouterModule.forRoot(
+      appRoutes
+    )
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-
-const appRoutes: Routes = [
-  { path: '',
-    redirectTo: '/my-swim-workout',
-    pathMatch: 'full'
-  }
-];
-
 export class AppModule { }
