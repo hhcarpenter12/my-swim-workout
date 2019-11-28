@@ -10,12 +10,9 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
-    imports: [
       RouterModule.forRoot(
         appRoutes)
       // other imports here
-    ],
-
   ],
   providers: [],
   bootstrap: [AppComponent]
