@@ -7,7 +7,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 
 @Component({
   selector: 'app-root',
-  styleUrls: ['app.component.css'],
+  styleUrls: ['app.component.scss'],
   templateUrl: 'app.component.html',
   animations: [
     trigger('detailExpand', [
