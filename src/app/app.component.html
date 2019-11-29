@@ -52,8 +52,6 @@
             </mat-form-field>
         </div>
 
-        <alert id="eventInvalid"></alert>
-
         <div class="row">
             <h4>Event Distance Type</h4>
             <mat-form-field>
@@ -186,7 +184,6 @@
 
             <div class="row">
                 <h4>Best IM time: {{bestIMTim}}</h4>
-                <alert id="splitIMInvalid"></alert>
             </div>
         </div>
 
@@ -202,7 +199,8 @@
         eventFocus != '400 Individual Medley'">
             <mat-form-field>
                 <mat-label>Minutes</mat-label>
-                <input [(ngModel)]="minutesBest" matInput type="number" required>
+                <input [(ngModel)]="minutesBest" matInput type="number" min="0" max="60" [formControl]="minuteControl" required>
+                <mat-error>Please enter a value between 0 and 60.</mat-error>
             </mat-form-field>
         </div>
 
@@ -211,29 +209,24 @@
         eventFocus != '400 Individual Medley'">
             <mat-form-field>
                 <mat-label>Seconds</mat-label>
-                <input [(ngModel)]="secondsBest" matInput type="number" required>
+                <input [(ngModel)]="secondsBest" matInput type="number" min="0" max="60" [formControl]="secondControl" required>
+                <mat-error>Please enter a value between 0 and 60.</mat-error>
             </mat-form-field>
         </div>
 
-
-        <alert *ngIf="eventFocus != '100 Individual Medley' &&
-        eventFocus != '200 Individual Medley' &&
-        eventFocus != '400 Individual Medley'" id="bestTimeInvalid"></alert>
-
-        <div class="row">
+        <div class="row" *ngIf="minutesBest != undefined && secondsBest != undefined">
             <h4>Enter split distance</h4>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="minutesBest != undefined && secondsBest != undefined">
             <mat-form-field>
                 <mat-label>Distance</mat-label>
-                <input [(ngModel)]="distance" matInput type="number" required>
+                <input [(ngModel)]="distance" matInput type="number" [formControl]="distanceControl" required>
+                <mat-error>This field is required.</mat-error>
             </mat-form-field>
         </div>
 
-        <alert id="distanceInvalid"></alert>
-
-        <div class="row">
+        <div class="row" *ngIf="distance != undefined">
             <h4>Split Distance Type</h4>
             <mat-form-field>
                 <mat-label>SCY/SCM/LCM</mat-label>
@@ -245,20 +238,18 @@
             </mat-form-field>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="distance != undefined">
             <h4>Hold within # seconds of personal record pace per <strong>{{distance}}</strong></h4>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="distance != undefined">
             <mat-form-field>
                 <mat-label>e.g. within 2 seconds</mat-label>
                 <input [(ngModel)]="holdWithinPR" matInput type="number" required>
             </mat-form-field>
         </div>
 
-        <alert id="holdWithinPRInvalid"></alert>
-
-        <div class="row">
+        <div class="row" *ngIf="distance != undefined">
             <h4>Number of {{distance}}s</h4>
             <mat-form-field>
                 <mat-label>Reps</mat-label>
@@ -266,9 +257,7 @@
             </mat-form-field>
         </div>
 
-        <alert id="repsInvalid"></alert>
-
-        <div class="row">
+        <div class="row" *ngIf="distance != undefined">
             <h4>Amount of rest between each {{distance}}</h4>
             <mat-form-field>
                 <mat-label>Seconds</mat-label>
@@ -276,7 +265,7 @@
             </mat-form-field>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="distance != undefined">
             <h4>Or Target Interval</h4>
             <mat-form-field>
                 <mat-label>Minutes</mat-label>
@@ -284,14 +273,12 @@
             </mat-form-field>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="distance != undefined"> 
             <mat-form-field>
                 <mat-label>Seconds</mat-label>
                 <input [(ngModel)]="targetSecondsInterval" matInput type="number">
             </mat-form-field>
         </div>
-
-        <alert id="restInvalid"></alert>
 
         <div class="example-button-row">
             <button mat-flat-button color="primary" (click)="generateWorkout()">Create Workout</button>
@@ -495,9 +482,6 @@
                                     element.eventFocus == '400 Individual Medley'">Best IM time: {{element.bestIMTim}}
                                     </h4>
 
-                                    <alert *ngIf="element.eventFocus == '100 Individual Medley' ||
-                                    element.eventFocus == '200 Individual Medley' ||
-                                    element.eventFocus == '400 Individual Medley'" id="splitIMInvalidElement"></alert>
 
                                     <h4 *ngIf="element.eventFocus != '100 Individual Medley' &&
                                     element.eventFocus != '200 Individual Medley' &&
@@ -519,11 +503,6 @@
                                             min="0" max="60" required>
                                     </mat-form-field>
 
-                                    <alert *ngIf="element.eventFocus != '100 Individual Medley' &&
-                                        element.eventFocus != '200 Individual Medley' &&
-                                        element.eventFocus != '400 Individual Medley'" id="bestTimeInvalidElement">
-                                    </alert>
-
                                     <h4>Enter split distance</h4>
 
                                     <mat-form-field>
@@ -541,7 +520,6 @@
                                             </select>
                                         </mat-form-field>
                                     
-                                    <alert id="distanceInvalidElement"></alert>
 
                                     <h4>Hold within # seconds of personal record pace per
                                         <strong>{{element.distance}}</strong>
@@ -552,15 +530,11 @@
                                         <input [(ngModel)]="element.holdWithinPR" type="number" matInput required>
                                     </mat-form-field>
 
-                                    <alert id="holdWithinPRInvalidElement"></alert>
-
                                     <h4>Number of {{element.distance}}s</h4>
                                     <mat-form-field>
                                         <mat-label>Reps</mat-label>
                                         <input matInput [(ngModel)]="element.reps" type="number" required>
                                     </mat-form-field>
-
-                                    <alert id="repsInvalidElement"></alert>
 
                                     <h4>Amount of rest between each {{element.distance}}</h4>
                                     <mat-form-field>
@@ -578,8 +552,6 @@
                                         <mat-label>Seconds</mat-label>
                                         <input [(ngModel)]="element.targetSecondsInterval" matInput type="number">
                                     </mat-form-field>
-
-                                    <alert id="restInvalidElement"></alert>
 
                                     <h4>Edit Workout</h4>
                                     <button mat-raised-button color="accent" (click)="editWorkout(element)">

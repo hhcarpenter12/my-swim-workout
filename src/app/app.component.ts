@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { AlertService } from './_alert';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +27,11 @@ export class AppComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Workout>(ELEMENT_DATA);
   title = 'Swim Workout Generator';
+
+  minuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required])
+  secondControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required])
+  distanceControl = new FormControl("", [Validators.required])
+  
 
   swimmerName = "";
   eventFocus = "50 Freestyle";
