@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { AlertService } from './_alert';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { AppDialog } from './app-dialog/app-dialog';
 
 @Component({
   selector: 'app-root',
@@ -19,20 +20,28 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private alertService: AlertService) { }
+  constructor(public dialog: MatDialog) { }
 
-  columnsToDisplay = ['swimmerName', 'eventFocus', 'eventDistanceType',  'personalRecord', 'distance', 'splitDistanceType',
+  columnsToDisplay = ['swimmerName', 'eventFocus', 'eventDistanceType', 'personalRecord', 'distance', 'splitDistanceType',
     'reps', 'restCol', 'holdWithinPR', 'target', 'delete'];
   expandedElement: Workout | null;
 
   dataSource = new MatTableDataSource<Workout>(ELEMENT_DATA);
   title = 'Swim Workout Generator';
 
-  minuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required])
-  secondControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required])
-  distanceControl = new FormControl("", [Validators.required])
-  
 
+  flyMinuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
+  flySecondControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
+  backMinuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
+  backSecondControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
+  breastMinuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
+  breastSecondControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
+  freeMinuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
+  freeSecondControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
+  minuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
+  secondControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
+  distanceControl = new FormControl("", [Validators.required]);
+  repsControl = new FormControl("", [Validators.required]);
   swimmerName = "";
   eventFocus = "50 Freestyle";
   minutesBest: number;
@@ -46,7 +55,6 @@ export class AppComponent implements OnInit {
   targetMinutesInterval: number;
   targetSecondsInterval: number;
   personalRecord: string;
-  error = false;
   flySplitMinutes = 0;
   flySplitSeconds = 0;
   backSplitMinutes = 0;
@@ -80,7 +88,7 @@ export class AppComponent implements OnInit {
   eventDistanceType = "SCY";
   splitDistanceType = "SCY";
 
-  @ViewChild(MatPaginator,  {static: false}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   ngOnInit() {
     this.dataSource.paginator = this.paginator;
@@ -88,12 +96,11 @@ export class AppComponent implements OnInit {
     this.deleteRow(ELEMENT_DATA[0]);
   }
 
-  convertIMTimeElement(element)
-  {
+  convertIMTimeElement(element) {
     let totalSeconds = (element.flySplitMinutes * 60) + element.flySplitSeconds +
-                       (element.backSplitMinutes * 60) + element.backSplitSeconds +
-                       (element.breastSplitMinutes * 60) + element.breastSplitSeconds +
-                       (element.freeSplitMinutes * 60) + element.freeSplitSeconds;
+      (element.backSplitMinutes * 60) + element.backSplitSeconds +
+      (element.breastSplitMinutes * 60) + element.breastSplitSeconds +
+      (element.freeSplitMinutes * 60) + element.freeSplitSeconds;
 
     let m = Math.floor(totalSeconds % 3600 / 60);
     let s = Math.round(((totalSeconds % 3600 % 60) * 100)) / 100;
@@ -112,9 +119,9 @@ export class AppComponent implements OnInit {
     freeSplitMinutes, freeSplitSeconds) {
 
     let totalSeconds = (flySplitMinutes * 60) + flySplitSeconds +
-                       (backSplitMinutes * 60) + backSplitSeconds +
-                       (breastSplitMinutes * 60) + breastSplitSeconds +
-                       (freeSplitMinutes * 60) + freeSplitSeconds;
+      (backSplitMinutes * 60) + backSplitSeconds +
+      (breastSplitMinutes * 60) + breastSplitSeconds +
+      (freeSplitMinutes * 60) + freeSplitSeconds;
 
     let m = Math.floor(totalSeconds % 3600 / 60);
     let s = Math.round(((totalSeconds % 3600 % 60) * 100)) / 100;
@@ -156,94 +163,7 @@ export class AppComponent implements OnInit {
       formattedSeconds = "0" + s;
     }
 
-    return  m + ":" + formattedSeconds + " Interval";
-  }
-
-  checkInput(eventFocus, distance, paceWithPR, reps, rest, targetMinutesInterval, targetSecondsInterval, isElement) {
-    if (eventFocus == null ||
-      eventFocus == "") {
-
-      if (isElement) {
-        this.alertService.error("An event must be selected.", "eventInvalidElement");
-      }
-      else {
-        this.alertService.error("An event must be selected.", "eventInvalid");
-      }
-
-      this.error = true;
-    }
-
-    if (distance == null ||
-      distance == 0) {
-
-      if (isElement) {
-        this.alertService.error("A distance must be selected.", "distanceInvalidElement");
-      }
-      else {
-        this.alertService.error("A distance must be selected.", "distanceInvalid");
-      }
-
-      this.error = true;
-    }
-
-    if (paceWithPR == null) {
-
-      if (isElement) {
-        this.alertService.error("Please enter a pace to hold within personal record", "holdWithinPRInvalidElement");
-      }
-      else {
-        this.alertService.error("Please enter a pace to hold within personal record", "holdWithinPRInvalid");
-      }
-    }
-
-    if (reps == null ||
-      reps == 0) {
-      if (isElement) {
-        this.alertService.error("The number of reps must be entered.", "repsInvalidElement");
-      }
-      else {
-        this.alertService.error("The number of reps must be entered.", "repsInvalid");
-      }
-
-      this.error = true;
-    }
-
-    if (rest != null &&
-      rest != "" &&
-      rest != "0" &&
-      !Number.isNaN(rest) &&
-      targetMinutesInterval != null &&
-      targetMinutesInterval >= 0 &&
-      targetSecondsInterval != null &&
-      targetSecondsInterval >= 0) {
-
-      if (isElement) {
-        this.alertService.error("A rest interval or number of seconds, not both, must be entered", "restInvalidElement");
-      }
-      else {
-        this.alertService.error("A rest interval or number of seconds, not both, must be entered", "restInvalid");
-      }
-
-      this.error = true;
-    } else {
-      if (rest == null &&
-        rest == "" &&
-        rest == "0" &&
-        targetMinutesInterval == null &&
-        targetMinutesInterval == 0 &&
-        targetSecondsInterval == null &&
-        targetSecondsInterval == 0) {
-
-        if (isElement) {
-          this.alertService.error("Amount of rest must be entered and must be greater than 0.", "restInvalidElement");
-        }
-        else {
-          this.alertService.error("Amount of rest must be entered and must be greater than 0.", "restInvalid");
-        }
-
-        this.error = true;
-      }
-    }
+    return m + ":" + formattedSeconds + " Interval";
   }
 
   findDivisor(eventFocus, tempDistance): number {
@@ -290,18 +210,11 @@ export class AppComponent implements OnInit {
       if (tempDistance == 25) {
         divisor = 1;
       }
-      else {
-        this.alertService.error("Invalid distance selected for this event.", "distanceInvalid");
-        this.error = true;
-      }
     } else if (eventFocus == this.IM200) {
       if (tempDistance == 25) {
         divisor = 2;
       } else if (tempDistance == 50) {
         divisor = 1;
-      } else {
-        this.alertService.error("Invalid distance selected for this event.", "distanceInvalid");
-        this.error = true;
       }
     } else if (eventFocus == this.IM400) {
       divisor = 100 / tempDistance;
@@ -310,23 +223,9 @@ export class AppComponent implements OnInit {
     return divisor;
   }
 
-  verifyIMReps(reps, isElement) {
-    if (reps % 4 != 0 ||
-      reps == 0) {
-      if (isElement) {
-        this.alertService.error("Number of reps must be divisible by 4 for IM workouts!", "repsInvalidElement");
-        this.error = true;
-      }
-      else {
-        this.alertService.error("Number of reps must be divisible by 4 for IM workouts!", "repsInvalid");
-        this.error = true;
-      }
-    }
-  }
-
   findTargetIMTime(divisor, flySplitMinutes, flySplitSeconds, backSplitMinutes, backSplitSeconds,
     breastSplitMinutes, breastSplitSeconds, freeSplitMinutes,
-    freeSplitSeconds, holdWithinPR, eventFocus, eventDistanceType, splitDistanceType, splitDistance): string {
+    freeSplitSeconds, holdWithinPR, eventDistanceType, splitDistanceType, splitDistance): string {
     let targetTime = "";
 
     let targetFly = (((flySplitMinutes * 60) + flySplitSeconds) / divisor) + holdWithinPR;
@@ -334,28 +233,16 @@ export class AppComponent implements OnInit {
     let targetBreast = (((breastSplitMinutes * 60) + breastSplitSeconds) / divisor) + holdWithinPR;
     let targetFree = (((freeSplitMinutes * 60) + freeSplitSeconds) / divisor) + holdWithinPR;
 
-    targetFly = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetFly, splitDistance);  
-    targetBack = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetBack, splitDistance);  
-    targetBreast = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetBreast, splitDistance);   
-    targetFree = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetFree, splitDistance);  
-
-    if (Number.isNaN(targetFly) ||
-      Number.isNaN(targetBack) ||
-      Number.isNaN(targetBreast) ||
-      Number.isNaN(targetFree) ||
-      targetFly == 0 ||
-      targetBack == 0 ||
-      targetBreast == 0 ||
-      targetFree == 0) {
-      this.alertService.error("Invalid IM split.", "splitIMInvalid");
-      this.error = true;
-    }
+    targetFly = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetFly, splitDistance);
+    targetBack = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetBack, splitDistance);
+    targetBreast = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetBreast, splitDistance);
+    targetFree = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetFree, splitDistance);
 
     targetTime = targetFly + " Fly / " + targetBack + " Back / " +
       targetBreast + " Breast / " + targetFree + " Free";
 
-
-
+    this.convertIMTime(flySplitMinutes, flySplitSeconds, backSplitMinutes, backSplitSeconds, breastSplitMinutes, breastSplitSeconds, freeSplitMinutes, freeSplitSeconds);
+    
     this.personalRecord = this.bestIMTim;
 
     return targetTime;
@@ -367,7 +254,7 @@ export class AppComponent implements OnInit {
     this.convertOtherTime(minutesBest, secondsBest);
 
     let targetTimeInit = (((minutesBest * 60) + secondsBest) / divisor) + holdWithinPR;
-    
+
     targetTimeInit = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetTimeInit, splitDistance);
 
     var m = Math.floor(targetTimeInit % 3600 / 60);
@@ -381,30 +268,10 @@ export class AppComponent implements OnInit {
 
     targetTime = m + ":" + formattedSeconds;
 
-    if (targetTime == null ||
-      targetTime == "" ||
-      targetTime == 0 + "") {
-      this.alertService.error("Please enter personal best for this event.", "bestTimeInvalid");
-      this.error = true;
-    }
-
     return targetTime;
   }
 
   editWorkout(element) {
-    this.error = false;
-    this.alertService.clear("eventInvalidElement");
-    this.alertService.clear("distanceInvalidElement");
-    this.alertService.clear("holdWithinPRInvalidElement");
-    this.alertService.clear("repsInvalidElement")
-    this.alertService.clear("splitIMInvalidElement");
-    this.alertService.clear("bestTimeInvalidElement");
-    this.alertService.clear("repsInvalidElement");
-    this.alertService.clear("restInvalidElement");
-
-    this.checkInput(element.eventFocus, element.distance,
-      element.holdWithinPR, element.reps, element.rest,
-      element.targetMinutesInterval, element.targetSecondsInterval, true);
 
     let divisor = this.findDivisor(element.eventFocus, element.distance);
 
@@ -414,182 +281,92 @@ export class AppComponent implements OnInit {
       this.finalTargetTime = this.findTargetIMTime(divisor, element.flySplitMinutes, element.flySplitSeconds,
         element.backSplitMinutes, element.backSplitSeconds,
         element.breastSplitMinutes, element.breastSplitSeconds,
-        element.freeSplitMinutes, element.freeSplitSeconds, element.eventFocus,
+        element.freeSplitMinutes, element.freeSplitSeconds,
         element.holdWithinPR, element.eventDistanceType, element.splitDistanceType, element.distance);
 
-      element.personalRecord = element.bestIMTim;   
-      this.verifyIMReps(element.reps, true);
+      element.personalRecord = this.personalRecord;
     }
     else {
       this.finalTargetTime = this.findTargetTime(divisor, element.holdWithinPR, element.minutesBest,
         element.secondsBest, element.eventDistanceType, element.splitDistanceType, element.distance);
 
-        element.personalRecord = this.personalRecord;
+      element.personalRecord = this.personalRecord;
     }
 
     if (element.targetMinutesInterval != null &&
-      element.targetSecondsInterval != null && 
-      ! Number.isNaN(element.targetMinutesInterval) &&
-      ! Number.isNaN(element.targetSecondsInterval)) {
+      element.targetSecondsInterval != null &&
+      !Number.isNaN(element.targetMinutesInterval) &&
+      !Number.isNaN(element.targetSecondsInterval)) {
       this.restString = this.convertRestTime(element.targetMinutesInterval, element.targetSecondsInterval);
     } else {
       this.restString = element.rest + " seconds";
     }
 
-    if (! this.error) {
 
-      let id = element.id;
+    let id = element.id;
 
-      element.targetTime = this.finalTargetTime;
-      element.restCol = this.restString;
+    element.targetTime = this.finalTargetTime;
+    element.restCol = this.restString;
 
 
-      let workout = {
-        id: id,
-        swimmerName: element.swimmerName,
-        eventFocus: element.eventFocus,
-        personalRecord: element.personalRecord,
-        minutesBest: element.minutesBest,
-        secondsBest: element.secondsBest,
-        distance: element.distance,
-        reps: element.reps,
-        restCol: element.restCol,
-        rest: Number.parseInt(element.rest),
-        targetMinutesInterval: element.targetMinutesInterval,
-        targetSecondsInterval: element.targetSecondsInterval,
-        holdWithinPR: element.holdWithinPR,
-        target: element.targetTime,
-        flySplitMinutes: element.flySplitMinutes,
-        flySplitSeconds: element.flySplitSeconds,
-        backSplitMinutes: element.backSplitMinutes,
-        backSplitSeconds: element.backSplitSeconds,
-        breastSplitMinutes: element.breastSplitMinutes,
-        breastSplitSeconds: element.breastSplitSeconds,
-        freeSplitMinutes: element.freeSplitMinutes,
-        freeSplitSeconds: element.freeSplitSeconds,
-        bestIMTim: this.bestIMTim,
-        eventDistanceType: element.eventDistanceType,
-        splitDistanceType: element.splitDistanceType
-      }
-
-      const data = this.dataSource.data;
-      data[id] = workout;
-      this.dataSource.data = data;
+    let workout = {
+      id: id,
+      swimmerName: element.swimmerName,
+      eventFocus: element.eventFocus,
+      personalRecord: element.personalRecord,
+      minutesBest: element.minutesBest,
+      secondsBest: element.secondsBest,
+      distance: element.distance,
+      reps: element.reps,
+      restCol: element.restCol,
+      rest: Number.parseInt(element.rest),
+      targetMinutesInterval: element.targetMinutesInterval,
+      targetSecondsInterval: element.targetSecondsInterval,
+      holdWithinPR: element.holdWithinPR,
+      target: element.targetTime,
+      flySplitMinutes: element.flySplitMinutes,
+      flySplitSeconds: element.flySplitSeconds,
+      backSplitMinutes: element.backSplitMinutes,
+      backSplitSeconds: element.backSplitSeconds,
+      breastSplitMinutes: element.breastSplitMinutes,
+      breastSplitSeconds: element.breastSplitSeconds,
+      freeSplitMinutes: element.freeSplitMinutes,
+      freeSplitSeconds: element.freeSplitSeconds,
+      bestIMTim: this.bestIMTim,
+      eventDistanceType: element.eventDistanceType,
+      splitDistanceType: element.splitDistanceType
     }
+
+    const data = this.dataSource.data;
+    data[id] = workout;
+    this.dataSource.data = data;
   }
 
-  generateWorkout() {
-    this.error = false;
-    this.restString = "";
-    this.alertService.clear("eventInvalid");
-    this.alertService.clear("distanceInvalid");
-    this.alertService.clear("holdWithinPRInvalid");
-    this.alertService.clear("repsInvalid")
-    this.alertService.clear("splitIMInvalid");
-    this.alertService.clear("bestTimeInvalid");
-    this.alertService.clear("repsInvalid");
-    this.alertService.clear("restInvalid");
-
-    this.checkInput(this.eventFocus, this.distance,
-      this.holdWithinPR, this.reps,
-      this.rest, this.targetMinutesInterval, this.targetSecondsInterval, false);
-
-    let divisor = this.findDivisor(this.eventFocus, this.distance);
-
-    if (this.eventFocus == this.IM100 ||
-      this.eventFocus == this.IM200 ||
-      this.eventFocus == this.IM400) {
-      this.finalTargetTime = this.findTargetIMTime(divisor, this.flySplitMinutes, this.flySplitSeconds,
-        this.backSplitMinutes, this.backSplitSeconds,
-        this.breastSplitMinutes, this.breastSplitSeconds,
-        this.freeSplitMinutes, this.freeSplitSeconds,
-        this.holdWithinPR, this.eventFocus, this.eventDistanceType, this.splitDistanceType, this.distance);
-      this.verifyIMReps(this.reps, false);
-    }
-    else {
-      this.finalTargetTime = this.findTargetTime(divisor, this.holdWithinPR, this.minutesBest, this.secondsBest, this.eventDistanceType, this.splitDistanceType, this.distance);
-    }
-
-    let id = this.dataSource.data.length;
-
-    if (this.targetMinutesInterval != null &&
-      this.targetSecondsInterval != null) {
-      this.restString = this.convertRestTime(this.targetMinutesInterval, this.targetSecondsInterval);
-    } else {
-      this.restString = this.rest + " seconds";
-    }
-
-    if (!this.error) {
-      let workout = {
-        id: id,
-        swimmerName: this.swimmerName,
-        eventFocus: this.eventFocus,
-        personalRecord: this.personalRecord,
-        minutesBest: this.minutesBest,
-        secondsBest: this.secondsBest,
-        distance: this.distance,
-        reps: this.reps,
-        restCol: this.restString,
-        rest: this.rest,
-        targetMinutesInterval: this.targetMinutesInterval,
-        targetSecondsInterval: this.targetSecondsInterval,
-        holdWithinPR: this.holdWithinPR,
-        target: this.finalTargetTime + "",
-        flySplitMinutes: this.flySplitMinutes,
-        flySplitSeconds: this.flySplitSeconds,
-        backSplitMinutes: this.backSplitMinutes,
-        backSplitSeconds: this.backSplitSeconds,
-        breastSplitMinutes: this.breastSplitMinutes,
-        breastSplitSeconds: this.breastSplitSeconds,
-        freeSplitMinutes: this.freeSplitMinutes,
-        freeSplitSeconds: this.freeSplitSeconds,
-        bestIMTim: this.bestIMTim,
-        eventDistanceType: this.eventDistanceType,
-        splitDistanceType: this.splitDistanceType
-      }
-      const data = this.dataSource.data;
-      data.push(workout);
-      this.dataSource.data = data;
-    }
-  }
-
-  convertDistanceTime(eventDistanceType, splitDistanceType, eventBestTime, splitDistance) 
-  {
-    console.log(splitDistance)
-
+  convertDistanceTime(eventDistanceType, splitDistanceType, eventBestTime, splitDistance) {
     let numTurns = splitDistance / 50;
 
-    if (eventDistanceType == "SCY")
-    {
-      if (splitDistanceType == "SCM")
-      {
+    if (eventDistanceType == "SCY") {
+      if (splitDistanceType == "SCM") {
         eventBestTime *= 1.11;
       }
-      else if (splitDistanceType == "LCM")
-      {
+      else if (splitDistanceType == "LCM") {
         eventBestTime *= 1.11;
         eventBestTime += numTurns;
       }
     }
-    else if (eventDistanceType == "SCM")
-    {
-      if (splitDistanceType == "SCY")
-      {
+    else if (eventDistanceType == "SCM") {
+      if (splitDistanceType == "SCY") {
         eventBestTime = eventBestTime - (eventBestTime * 0.11);
       }
-      else if (splitDistanceType == "LCM")
-      {
+      else if (splitDistanceType == "LCM") {
         eventBestTime += numTurns;
       }
     }
-    else if (eventDistanceType == "LCM")
-    {
-      if (splitDistanceType == "SCY")
-      {
+    else if (eventDistanceType == "LCM") {
+      if (splitDistanceType == "SCY") {
         eventBestTime = eventBestTime - (eventBestTime * 0.11) - numTurns;
       }
-      else if (splitDistanceType == "SCM")
-      {
+      else if (splitDistanceType == "SCM") {
         eventBestTime = eventBestTime - (eventBestTime * 0.11);
       }
 
@@ -624,6 +401,20 @@ export class AppComponent implements OnInit {
     });
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AppDialog, {
+      width: '500px',
+      data: { data: this.dataSource }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result != null) {
+        this.dataSource = result.data;
+      }
+    });
+  }
+
+
   public changeListener(files: FileList) {
     if (files && files.length > 0) {
       let file: File = files.item(0);
@@ -637,48 +428,44 @@ export class AppComponent implements OnInit {
         for (let i = 1; i < csvRead.length; i++) {
           let line = csvRead[i].split(',');
 
-          if (line.length < 25) {
-            this.alertService.error("Invalid CSV file. Ensure that it contains the correct data.")
-          }
-          else {
-            let workout = {
-              id: Number.parseInt(line[0]),
-              swimmerName: JSON.parse(line[1]),
-              eventFocus: JSON.parse(line[2]),
-              personalRecord: JSON.parse(line[3]),
-              minutesBest: Number.parseInt(line[4]),
-              secondsBest: Math.round(Number.parseFloat(line[5]) * 100) / 100,
-              distance: Number.parseInt(line[6]),
-              reps: Number.parseInt(line[7]),
-              restCol: JSON.parse(line[8]),
-              rest: Number.parseInt(line[9]),
-              targetMinutesInterval: Number.parseInt(line[10]),
-              targetSecondsInterval: Number.parseInt(line[11]),
-              holdWithinPR: JSON.parse(line[12]),
-              target: JSON.parse(line[13]),
-              flySplitMinutes: Number.parseInt(line[14]),
-              flySplitSeconds: Number.parseInt(line[15]),
-              backSplitMinutes: Number.parseInt(line[16]),
-              backSplitSeconds: Number.parseInt(line[17]),
-              breastSplitMinutes: Number.parseInt(line[18]),
-              breastSplitSeconds: Number.parseInt(line[19]),
-              freeSplitMinutes: Number.parseInt(line[20]),
-              freeSplitSeconds: Number.parseInt(line[21]),
-              bestIMTim: JSON.parse(line[22]),
-              eventDistanceType: JSON.parse(line[23]),
-              splitDistanceType: JSON.parse(line[24])
-            }
 
-            const data = this.dataSource.data;
-            data.push(workout);
-            this.dataSource.data = data;
-
+          let workout = {
+            id: Number.parseInt(line[0]),
+            swimmerName: JSON.parse(line[1]),
+            eventFocus: JSON.parse(line[2]),
+            personalRecord: JSON.parse(line[3]),
+            minutesBest: Number.parseInt(line[4]),
+            secondsBest: Math.round(Number.parseFloat(line[5]) * 100) / 100,
+            distance: Number.parseInt(line[6]),
+            reps: Number.parseInt(line[7]),
+            restCol: JSON.parse(line[8]),
+            rest: Number.parseInt(line[9]),
+            targetMinutesInterval: Number.parseInt(line[10]),
+            targetSecondsInterval: Number.parseInt(line[11]),
+            holdWithinPR: JSON.parse(line[12]),
+            target: JSON.parse(line[13]),
+            flySplitMinutes: Number.parseInt(line[14]),
+            flySplitSeconds: Number.parseInt(line[15]),
+            backSplitMinutes: Number.parseInt(line[16]),
+            backSplitSeconds: Number.parseInt(line[17]),
+            breastSplitMinutes: Number.parseInt(line[18]),
+            breastSplitSeconds: Number.parseInt(line[19]),
+            freeSplitMinutes: Number.parseInt(line[20]),
+            freeSplitSeconds: Number.parseInt(line[21]),
+            bestIMTim: JSON.parse(line[22]),
+            eventDistanceType: JSON.parse(line[23]),
+            splitDistanceType: JSON.parse(line[24])
           }
+
+          const data = this.dataSource.data;
+          data.push(workout);
+          this.dataSource.data = data;
         }
       }
     }
   }
 }
+
 
 export interface Workout {
   id: number;

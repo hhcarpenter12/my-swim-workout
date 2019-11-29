@@ -1,5 +1,4 @@
-
-  <router-outlet></router-outlet>
+<router-outlet></router-outlet>
 
 
 <div align='center'>
@@ -10,463 +9,127 @@
         </header>
     </article>
 
-    <div class="row">
-        <h4>Swimmer name</h4>
+    <button mat-raised-button color="primary" (click)="openDialog()">Add Workout</button>
+
+
+    <mat-divider style="height: 50px;"></mat-divider>
+
+    <div class="example-button-row">
+
+        <label>Download File as CSV</label>
+        <button mat-raised-button color="accent" (click)="downloadFile()">
+            <mat-icon>cloud_download</mat-icon>
+        </button>
+
+        <label>Import CSV File</label>
+        <input type="file" class="upload" (change)="changeListener($event.target.files)">
     </div>
 
+    <mat-divider style="height: 50px;"></mat-divider>
+
     <div class="row">
-        <mat-form-field>
-            <mat-label>Name</mat-label>
-            <input [(ngModel)]="swimmerName" matInput type="text">
-        </mat-form-field>
-    </div>
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
 
-    <div class="column">
-        <div class="row">
-            <h4>Event focus</h4>
-            <mat-form-field>
-                <mat-label>Event</mat-label>
-                <select [(ngModel)]="eventFocus" matNativeControl required>
-                    <option value="50 Freestyle">50 Freestyle</option>
-                    <option value="50 Backstroke">50 Backstroke</option>
-                    <option value="50 Breastroke">50 Breastroke</option>
-                    <option value="50 Butterfly">50 Butterfly</option>
-                    <option value="100 Freestyle">100 Freestyle</option>
-                    <option value="100 Backstroke">100 Backstroke</option>
-                    <option value="100 Breastroke">100 Breastroke</option>
-                    <option value="100 Butterfly">100 Butterfly</option>
-                    <option value="100 Individual Medley">100 Individual Medley</option>
-                    <option value="200 Freestyle">200 Freestyle</option>
-                    <option value="200 Butterfly">200 Butterfly</option>
-                    <option value="200 Backstroke">200 Backstroke</option>
-                    <option value="200 Breastroke">200 Breastroke</option>
-                    <option value="200 Individual Medley">200 Individual Medley</option>
-                    <option value="400 Individual Medley">400 Individual Medley</option>
-                    <option value="400 Freestyle">400 Freestyle</option>
-                    <option value="500 Freestyle">500 Freestyle</option>
-                    <option value="800 Freestyle">800 Freestyle</option>
-                    <option value="1000 Freestyle">1000 Freestyle</option>
-                    <option value="1500 Freestyle">1500 Freestyle</option>
-                    <option value="1650 Freestyle">1650 Freestyle</option>
-                </select>
-            </mat-form-field>
-        </div>
+                <ng-container matColumnDef="swimmerName">
+                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.swimmerName}} </td>
+                </ng-container>
 
-        <div class="row">
-            <h4>Event Distance Type</h4>
-            <mat-form-field>
-                <mat-label>SCY/SCM/LCM</mat-label>
-                <select [(ngModel)]="eventDistanceType" matNativeControl required>
-                    <option value="SCY">Short Course Yards</option>
-                    <option value="SCM">Short Course Meters</option>
-                    <option value="LCM">Long Course Meters</option>
-                </select>
-            </mat-form-field>
-        </div>
+                <ng-container matColumnDef="eventFocus">
+                    <th mat-header-cell *matHeaderCellDef>Event</th>
+                    <td mat-cell *matCellDef="let element"> {{element.eventFocus}}
+                    </td>
+                </ng-container>
 
-        <div *ngIf="eventFocus == '100 Individual Medley' ||
-        eventFocus == '200 Individual Medley' ||
-        eventFocus == '400 Individual Medley'">
+                <ng-container matColumnDef="eventDistanceType">
+                    <th mat-header-cell *matHeaderCellDef> Meet Pool Config. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.eventDistanceType}}
+                    </td>
+                </ng-container>
 
+                <ng-container matColumnDef="personalRecord">
+                    <th mat-header-cell *matHeaderCellDef> Personal Record </th>
+                    <td mat-cell *matCellDef="let element"> {{element.personalRecord}} </td>
+                </ng-container>
 
-            <div class="row">
-                <mat-form-field>
-                    <mat-label>Fly split (minutes)</mat-label>
-                    <input [(ngModel)]="flySplitMinutes" (keyup)="convertIMTime(this.flySplitMinutes,
-                    this.flySplitSeconds,
-                    this.backSplitMinutes,
-                    this.backSplitSeconds,
-                    this.breastSplitMinutes,
-                    this.breastSplitSeconds,
-                    this.freeSplitMinutes,
-                    this.freeSplitSeconds)" matInput type="number" required>
-                </mat-form-field>
-            </div>
+                <ng-container matColumnDef="distance">
+                    <th mat-header-cell *matHeaderCellDef> Split Dist. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.distance}} </td>
+                </ng-container>
 
-            <div class="row">
-                <mat-form-field>
-                    <mat-label>Fly split (seconds)</mat-label>
-                    <input [(ngModel)]="flySplitSeconds" matInput type="number" (keyup)="convertIMTime(this.flySplitMinutes,
-                    this.flySplitSeconds,
-                    this.backSplitMinutes,
-                    this.backSplitSeconds,
-                    this.breastSplitMinutes,
-                    this.breastSplitSeconds,
-                    this.freeSplitMinutes,
-                    this.freeSplitSeconds)" required>
-                </mat-form-field>
-            </div>
+                <ng-container matColumnDef="splitDistanceType">
+                    <th mat-header-cell *matHeaderCellDef> Practice  Pool Config. </th>
+                    <td mat-cell *matCellDef="let element"> {{element.splitDistanceType}}
+                    </td>
+                </ng-container>
 
-            <div class="row">
-                <mat-form-field>
-                    <mat-label>Back split (minutes)</mat-label>
-                    <input [(ngModel)]="backSplitMinutes" matInput type="number" (keyup)="convertIMTime(this.flySplitMinutes,
-                    this.flySplitSeconds,
-                    this.backSplitMinutes,
-                    this.backSplitSeconds,
-                    this.breastSplitMinutes,
-                    this.breastSplitSeconds,
-                    this.freeSplitMinutes,
-                    this.freeSplitSeconds)" required>
-                </mat-form-field>
-            </div>
+                <ng-container matColumnDef="reps">
+                    <th mat-header-cell *matHeaderCellDef> Reps </th>
+                    <td mat-cell *matCellDef="let element"> {{element.reps}} </td>
+                </ng-container>
 
-            <div class="row">
-                <mat-form-field>
-                    <mat-label>Back split (seconds)</mat-label>
-                    <input [(ngModel)]="backSplitSeconds" matInput type="number" (keyup)="convertIMTime(this.flySplitMinutes,
-                    this.flySplitSeconds,
-                    this.backSplitMinutes,
-                    this.backSplitSeconds,
-                    this.breastSplitMinutes,
-                    this.breastSplitSeconds,
-                    this.freeSplitMinutes,
-                    this.freeSplitSeconds)" required>
-                </mat-form-field>
-            </div>
+                <ng-container matColumnDef="restCol">
+                    <th mat-header-cell *matHeaderCellDef> Rest </th>
+                    <td mat-cell *matCellDef="let element"> {{element.restCol}} </td>
+                </ng-container>
 
-            <div class="row">
-                <mat-form-field>
-                    <mat-label>Breast split (minutes)</mat-label>
-                    <input [(ngModel)]="breastSplitMinutes" matInput type="number" (keyup)="convertIMTime(this.flySplitMinutes,
-                    this.flySplitSeconds,
-                    this.backSplitMinutes,
-                    this.backSplitSeconds,
-                    this.breastSplitMinutes,
-                    this.breastSplitSeconds,
-                    this.freeSplitMinutes,
-                    this.freeSplitSeconds)" required>
-                </mat-form-field>
-            </div>
+                <ng-container matColumnDef="holdWithinPR">
+                    <th mat-header-cell *matHeaderCellDef> Hold Within </th>
+                    <td mat-cell *matCellDef="let element"> {{element.holdWithinPR}} </td>
+                </ng-container>
 
-            <div class="row">
-                <mat-form-field>
-                    <mat-label>Breast split (seconds)</mat-label>
-                    <input [(ngModel)]="breastSplitSeconds" matInput type="number" (keyup)="convertIMTime(this.flySplitMinutes,
-                    this.flySplitSeconds,
-                    this.backSplitMinutes,
-                    this.backSplitSeconds,
-                    this.breastSplitMinutes,
-                    this.breastSplitSeconds,
-                    this.freeSplitMinutes,
-                    this.freeSplitSeconds)" required>
-                </mat-form-field>
-            </div>
+                <ng-container matColumnDef="target">
+                    <th mat-header-cell *matHeaderCellDef> Target </th>
+                    <td mat-cell *matCellDef="let element"> {{element.target}} </td>
+                </ng-container>
 
-            <div class="row">
-                <mat-form-field>
-                    <mat-label>Free split (minutes)</mat-label>
-                    <input [(ngModel)]="freeSplitMinutes" matInput type="number" (keyup)="convertIMTime(this.flySplitMinutes,
-                    this.flySplitSeconds,
-                    this.backSplitMinutes,
-                    this.backSplitSeconds,
-                    this.breastSplitMinutes,
-                    this.breastSplitSeconds,
-                    this.freeSplitMinutes,
-                    this.freeSplitSeconds)" required>
+                <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef> Delete </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button color="accent" (click)="deleteRow(element)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
 
-                </mat-form-field>
-            </div>
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+                        <div class="example-element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <div class="example-element-diagram">
 
-            <div class="row">
-                <mat-form-field>
-                    <mat-label>Free split (seconds)</mat-label>
-                    <input [(ngModel)]="freeSplitSeconds" matInput type="number" (keyup)="convertIMTime(this.flySplitMinutes,
-                    this.flySplitSeconds,
-                    this.backSplitMinutes,
-                    this.backSplitSeconds,
-                    this.breastSplitMinutes,
-                    this.breastSplitSeconds,
-                    this.freeSplitMinutes,
-                    this.freeSplitSeconds)" required>
-                </mat-form-field>
-            </div>
+                                <h4>Swimmer Name</h4>
 
-            <div class="row">
-                <h4>Best IM time: {{bestIMTim}}</h4>
-            </div>
-        </div>
+                                <mat-form-field>
+                                    <mat-label>Name</mat-label>
+                                    <input [(ngModel)]="element.swimmerName" matInput type="text">
+                                </mat-form-field>
 
-
-        <div class="row" *ngIf="eventFocus != '100 Individual Medley' &&
-        eventFocus != '200 Individual Medley' &&
-        eventFocus != '400 Individual Medley'">
-            <h4>Best time</h4>
-        </div>
-
-        <div class="row" *ngIf="eventFocus != '100 Individual Medley' &&
-        eventFocus != '200 Individual Medley' &&
-        eventFocus != '400 Individual Medley'">
-            <mat-form-field>
-                <mat-label>Minutes</mat-label>
-                <input [(ngModel)]="minutesBest" matInput type="number" min="0" max="60" [formControl]="minuteControl" required>
-                <mat-error>Please enter a value between 0 and 60.</mat-error>
-            </mat-form-field>
-        </div>
-
-        <div class="row" *ngIf="eventFocus != '100 Individual Medley' &&
-        eventFocus != '200 Individual Medley' &&
-        eventFocus != '400 Individual Medley'">
-            <mat-form-field>
-                <mat-label>Seconds</mat-label>
-                <input [(ngModel)]="secondsBest" matInput type="number" min="0" max="60" [formControl]="secondControl" required>
-                <mat-error>Please enter a value between 0 and 60.</mat-error>
-            </mat-form-field>
-        </div>
-
-        <div class="row" *ngIf="minutesBest != undefined && secondsBest != undefined">
-            <h4>Enter split distance</h4>
-        </div>
-
-        <div class="row" *ngIf="minutesBest != undefined && secondsBest != undefined">
-            <mat-form-field>
-                <mat-label>Distance</mat-label>
-                <input [(ngModel)]="distance" matInput type="number" [formControl]="distanceControl" required>
-                <mat-error>This field is required.</mat-error>
-            </mat-form-field>
-        </div>
-
-        <div class="row" *ngIf="distance != undefined">
-            <h4>Split Distance Type</h4>
-            <mat-form-field>
-                <mat-label>SCY/SCM/LCM</mat-label>
-                <select [(ngModel)]="splitDistanceType" matNativeControl required>
-                    <option value="SCY">Short Course Yards</option>
-                    <option value="SCM">Short Course Meters</option>
-                    <option value="LCM">Long Course Meters</option>
-                </select>
-            </mat-form-field>
-        </div>
-
-        <div class="row" *ngIf="distance != undefined">
-            <h4>Hold within # seconds of personal record pace per <strong>{{distance}}</strong></h4>
-        </div>
-
-        <div class="row" *ngIf="distance != undefined">
-            <mat-form-field>
-                <mat-label>e.g. within 2 seconds</mat-label>
-                <input [(ngModel)]="holdWithinPR" matInput type="number" required>
-            </mat-form-field>
-        </div>
-
-        <div class="row" *ngIf="distance != undefined">
-            <h4>Number of {{distance}}s</h4>
-            <mat-form-field>
-                <mat-label>Reps</mat-label>
-                <input matInput [(ngModel)]="reps" type="number" required>
-            </mat-form-field>
-        </div>
-
-        <div class="row" *ngIf="distance != undefined">
-            <h4>Amount of rest between each {{distance}}</h4>
-            <mat-form-field>
-                <mat-label>Seconds</mat-label>
-                <input [(ngModel)]="rest" matInput type="number">
-            </mat-form-field>
-        </div>
-
-        <div class="row" *ngIf="distance != undefined">
-            <h4>Or Target Interval</h4>
-            <mat-form-field>
-                <mat-label>Minutes</mat-label>
-                <input [(ngModel)]="targetMinutesInterval" matInput type="number">
-            </mat-form-field>
-        </div>
-
-        <div class="row" *ngIf="distance != undefined"> 
-            <mat-form-field>
-                <mat-label>Seconds</mat-label>
-                <input [(ngModel)]="targetSecondsInterval" matInput type="number">
-            </mat-form-field>
-        </div>
-
-        <div class="example-button-row">
-            <button mat-flat-button color="primary" (click)="generateWorkout()">Create Workout</button>
-        </div>
-
-        <mat-divider style="height: 50px;"></mat-divider>
-
-        <div class="example-button-row">
-
-            <label>Download File as CSV</label>
-            <button mat-raised-button color="accent" (click)="downloadFile()">
-                    <mat-icon>cloud_download</mat-icon>
-                </button>
-
-            <label>Import CSV File</label>
-            <input type="file" class="upload" (click)="changeListener($event.target.files)">  
-
-            <!-- <input type="file" style="display: none" #file>
-            <button mat-flat-button color="accent" (click)="changeListener($event.target.files)">
-                    <mat-icon>cloud_upload</mat-icon>  Still hashing this out...--> 
-            <!-- </button> -->
-        </div>
-
-        <mat-divider style="height: 50px;"></mat-divider>
-
-        <div class="row">
-            <div class="mat-elevation-z8">
-                <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
-
-                    <ng-container matColumnDef="swimmerName">
-                        <th mat-header-cell *matHeaderCellDef> Swimmer Name </th>
-                        <td mat-cell *matCellDef="let element"> {{element.swimmerName}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="eventFocus">
-                        <th mat-header-cell *matHeaderCellDef> Event Focus </th>
-                        <td mat-cell *matCellDef="let element"> {{element.eventFocus}}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="eventDistanceType">
-                        <th mat-header-cell *matHeaderCellDef> Event Distance Type </th>
-                        <td mat-cell *matCellDef="let element"> {{element.eventDistanceType}}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="personalRecord">
-                        <th mat-header-cell *matHeaderCellDef> Personal Record </th>
-                        <td mat-cell *matCellDef="let element"> {{element.personalRecord}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="distance">
-                        <th mat-header-cell *matHeaderCellDef> Split Distance </th>
-                        <td mat-cell *matCellDef="let element"> {{element.distance}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="splitDistanceType">
-                        <th mat-header-cell *matHeaderCellDef> Split Distance Type </th>
-                        <td mat-cell *matCellDef="let element"> {{element.splitDistanceType}}
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="reps">
-                        <th mat-header-cell *matHeaderCellDef> Reps </th>
-                        <td mat-cell *matCellDef="let element"> {{element.reps}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="restCol">
-                        <th mat-header-cell *matHeaderCellDef> Rest </th>
-                        <td mat-cell *matCellDef="let element"> {{element.restCol}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="holdWithinPR">
-                        <th mat-header-cell *matHeaderCellDef> Hold Within # Seconds </th>
-                        <td mat-cell *matCellDef="let element"> {{element.holdWithinPR}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="target">
-                        <th mat-header-cell *matHeaderCellDef> Target </th>
-                        <td mat-cell *matCellDef="let element"> {{element.target}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="delete">
-                        <th mat-header-cell *matHeaderCellDef> Delete </th>
-                        <td mat-cell *matCellDef="let element">
-                            <button mat-raised-button color="accent" (click)="deleteRow(element)">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="expandedDetail">
-                        <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
-                            <div class="example-element-detail"
-                                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-                                <div class="example-element-diagram">
-
-                                    <h4>Swimmer Name</h4>
-
-                                    <mat-form-field>
-                                        <mat-label>Name</mat-label>
-                                        <input [(ngModel)]="element.swimmerName" matInput type="text">
-                                    </mat-form-field>
-
-                                    <h4 *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                <h4 *ngIf="element.eventFocus == '100 Individual Medley' ||
                                     element.eventFocus == '200 Individual Medley' ||
                                     element.eventFocus == '400 Individual Medley'">Fly Split</h4>
 
-                                    <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
                                     element.eventFocus == '200 Individual Medley' ||
                                     element.eventFocus == '400 Individual Medley'">
-                                        <mat-label>Fly split (minutes)</mat-label>
-                                        <input [(ngModel)]="element.flySplitMinutes" (keyup)="convertIMTime(element.flySplitMinutes,
+                                    <mat-label>Fly split (minutes)</mat-label>
+                                    <input [(ngModel)]="element.flySplitMinutes" (keyup)="convertIMTime(element.flySplitMinutes,
                                         element.flySplitSeconds,
                                         element.backSplitMinutes,
                                         element.backSplitSeconds,
                                         element.breastSplitMinutes,
                                         element.breastSplitSeconds,
                                         element.freeSplitMinutes,
-                                        element.freeSplitSeconds)" matInput type="number" required>
+                                        element.freeSplitSeconds)" matInput type="number" min="0" max="60" [formControl]="flyMinuteControl" required>
+                                        <mat-error>Values 0-60 are valid.</mat-error>
                                     </mat-form-field>
 
-                                    <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
                                     element.eventFocus == '200 Individual Medley' ||
                                     element.eventFocus == '400 Individual Medley'">
-                                        <mat-label>Fly split (seconds)</mat-label>
-                                        <input [(ngModel)]="element.flySplitSeconds" matInput type="number"
-                                            (keyup)="convertIMTimeElement(element)" required>
-                                    </mat-form-field>
-
-                                    <h4 *ngIf="element.eventFocus == '100 Individual Medley' ||
-                                    element.eventFocus == '200 Individual Medley' ||
-                                    element.eventFocus == '400 Individual Medley'">Back Split</h4>
-
-                                    <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
-                                    element.eventFocus == '200 Individual Medley' ||
-                                    element.eventFocus == '400 Individual Medley'">
-                                        <mat-label>Back split (minutes)</mat-label>
-                                        <input [(ngModel)]="element.backSplitMinutes" matInput type="number"
-                                            (keyup)="convertIMTimeElement(element)" required>
-                                    </mat-form-field>
-
-                                    <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
-                                    element.eventFocus == '200 Individual Medley' ||
-                                    element.eventFocus == '400 Individual Medley'">
-                                        <mat-label>Back split (seconds)</mat-label>
-                                        <input [(ngModel)]="element.backSplitSeconds" matInput type="number"
-                                            (keyup)="convertIMTimeElement(element)" required>
-                                    </mat-form-field>
-
-                                    <h4 *ngIf="element.eventFocus == '100 Individual Medley' ||
-                                    element.eventFocus == '200 Individual Medley' ||
-                                    element.eventFocus == '400 Individual Medley'">Breast Split</h4>
-
-                                    <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
-                                    element.eventFocus == '200 Individual Medley' ||
-                                    element.eventFocus == '400 Individual Medley'">
-                                        <mat-label>Breast split (minutes)</mat-label>
-                                        <input [(ngModel)]="element.breastSplitMinutes" matInput type="number"
-                                            (keyup)="convertIMTimeElement(element)" required>
-                                    </mat-form-field>
-
-                                    <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
-                                    element.eventFocus == '200 Individual Medley' ||
-                                    element.eventFocus == '400 Individual Medley'">
-                                        <mat-label>Breast split (seconds)</mat-label>
-                                        <input [(ngModel)]="element.breastSplitSeconds" matInput type="number"
-                                            (keyup)="convertIMTimeElement(element)" required>
-                                    </mat-form-field>
-
-                                    <h4 *ngIf="element.eventFocus == '100 Individual Medley' ||
-                                    element.eventFocus == '200 Individual Medley' ||
-                                    element.eventFocus == '400 Individual Medley'">Free Split</h4>
-
-                                    <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
-                                    element.eventFocus == '200 Individual Medley' ||
-                                    element.eventFocus == '400 Individual Medley'">
-                                        <mat-label>Free split (minutes)</mat-label>
-                                        <input [(ngModel)]="element.freeSplitMinutes" matInput type="number"
-                                            (keyup)="convertIMTimeElement(element)" required>
-
-                                    </mat-form-field>
-
-                                    <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
-                                    element.eventFocus == '200 Individual Medley' ||
-                                    element.eventFocus == '400 Individual Medley'">
-                                        <mat-label>Free split (seconds)</mat-label>
-                                        <input [(ngModel)]="element.freeSplitSeconds" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
+                                    <mat-label>Fly split (seconds)</mat-label>
+                                    <input [(ngModel)]="element.flySplitSeconds" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
                                                                                           element.flySplitSeconds,
                                                                                           element.backSplitMinutes,
                                                                                           element.backSplitSeconds,
@@ -474,106 +137,220 @@
                                                                                           element.breastSplitSeconds,
                                                                                           element.freeSplitMinutes,
                                                                                           element.freeSplitSeconds)"
-                                            required>
+                                        required min="0" max="60" [formControl]="flySecondControl">
+                                        <mat-error>Values 0-60 are valid.</mat-error>
                                     </mat-form-field>
 
-                                    <h4 *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                <h4 *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                    element.eventFocus == '200 Individual Medley' ||
+                                    element.eventFocus == '400 Individual Medley'">Back Split</h4>
+
+                                <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                    element.eventFocus == '200 Individual Medley' ||
+                                    element.eventFocus == '400 Individual Medley'">
+                                    <mat-label>Back split (minutes)</mat-label>
+                                    <input [(ngModel)]="element.backSplitMinutes" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
+                                                                                          element.flySplitSeconds,
+                                                                                          element.backSplitMinutes,
+                                                                                          element.backSplitSeconds,
+                                                                                          element.breastSplitMinutes,
+                                                                                          element.breastSplitSeconds,
+                                                                                          element.freeSplitMinutes,
+                                                                                          element.freeSplitSeconds)"
+                                        required min="0" max="60" [formControl]="backMinuteControl">
+                                        <mat-error>Values 0-60 are valid.</mat-error>
+                                    </mat-form-field>
+
+                                <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                    element.eventFocus == '200 Individual Medley' ||
+                                    element.eventFocus == '400 Individual Medley'">
+                                    <mat-label>Back split (seconds)</mat-label>
+                                    <input [(ngModel)]="element.backSplitSeconds" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
+                                                                                          element.flySplitSeconds,
+                                                                                          element.backSplitMinutes,
+                                                                                          element.backSplitSeconds,
+                                                                                          element.breastSplitMinutes,
+                                                                                          element.breastSplitSeconds,
+                                                                                          element.freeSplitMinutes,
+                                                                                          element.freeSplitSeconds)"
+                                        required min="0" max="60" [formControl]="backSecondControl">
+                                        <mat-error>Values 0-60 are valid.</mat-error>
+                                    </mat-form-field>
+
+                                <h4 *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                    element.eventFocus == '200 Individual Medley' ||
+                                    element.eventFocus == '400 Individual Medley'">Breast Split</h4>
+
+                                <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                    element.eventFocus == '200 Individual Medley' ||
+                                    element.eventFocus == '400 Individual Medley'">
+                                    <mat-label>Breast split (minutes)</mat-label>
+                                    <input [(ngModel)]="element.breastSplitMinutes" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
+                                                                                          element.flySplitSeconds,
+                                                                                          element.backSplitMinutes,
+                                                                                          element.backSplitSeconds,
+                                                                                          element.breastSplitMinutes,
+                                                                                          element.breastSplitSeconds,
+                                                                                          element.freeSplitMinutes,
+                                                                                          element.freeSplitSeconds)"
+                                        required min="0" max="60" [formControl]="breastMinuteControl">
+                                        <mat-error>Values 0-60 are valid.</mat-error>
+                                    </mat-form-field>
+
+                                <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                    element.eventFocus == '200 Individual Medley' ||
+                                    element.eventFocus == '400 Individual Medley'">
+                                    <mat-label>Breast split (seconds)</mat-label>
+                                    <input [(ngModel)]="element.breastSplitSeconds" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
+                                                                                          element.flySplitSeconds,
+                                                                                          element.backSplitMinutes,
+                                                                                          element.backSplitSeconds,
+                                                                                          element.breastSplitMinutes,
+                                                                                          element.breastSplitSeconds,
+                                                                                          element.freeSplitMinutes,
+                                                                                          element.freeSplitSeconds)"
+                                        required min="0" max="60" [formControl]="breastSecondControl">
+                                        <mat-error>Values 0-60 are valid.</mat-error>
+                                    </mat-form-field>
+
+                                <h4 *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                    element.eventFocus == '200 Individual Medley' ||
+                                    element.eventFocus == '400 Individual Medley'">Free Split</h4>
+
+                                <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                    element.eventFocus == '200 Individual Medley' ||
+                                    element.eventFocus == '400 Individual Medley'">
+                                    <mat-label>Free split (minutes)</mat-label>
+                                    <input [(ngModel)]="element.freeSplitMinutes" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
+                                                                                          element.flySplitSeconds,
+                                                                                          element.backSplitMinutes,
+                                                                                          element.backSplitSeconds,
+                                                                                          element.breastSplitMinutes,
+                                                                                          element.breastSplitSeconds,
+                                                                                          element.freeSplitMinutes,
+                                                                                          element.freeSplitSeconds)"
+                                        required min="0" max="60" [formControl]="freeMinuteControl">
+                                        <mat-error>Values 0-60 are valid.</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field *ngIf="element.eventFocus == '100 Individual Medley' ||
+                                    element.eventFocus == '200 Individual Medley' ||
+                                    element.eventFocus == '400 Individual Medley'">
+                                    <mat-label>Free split (seconds)</mat-label>
+                                    <input [(ngModel)]="element.freeSplitSeconds" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
+                                                                                          element.flySplitSeconds,
+                                                                                          element.backSplitMinutes,
+                                                                                          element.backSplitSeconds,
+                                                                                          element.breastSplitMinutes,
+                                                                                          element.breastSplitSeconds,
+                                                                                          element.freeSplitMinutes,
+                                                                                          element.freeSplitSeconds)"
+                                        required min="0" max="60" [formControl]="freeSecondControl">
+                                        <mat-error>Values 0-60 are valid.</mat-error>
+                                    </mat-form-field>
+
+                                <h4 *ngIf="element.eventFocus == '100 Individual Medley' ||
                                     element.eventFocus == '200 Individual Medley' ||
                                     element.eventFocus == '400 Individual Medley'">Best IM time: {{element.bestIMTim}}
-                                    </h4>
+                                </h4>
 
 
-                                    <h4 *ngIf="element.eventFocus != '100 Individual Medley' &&
+                                <h4 *ngIf="element.eventFocus != '100 Individual Medley' &&
                                     element.eventFocus != '200 Individual Medley' &&
                                     element.eventFocus != '400 Individual Medley'">Best time</h4>
 
-                                    <mat-form-field *ngIf="element.eventFocus != '100 Individual Medley' &&
+                                <mat-form-field *ngIf="element.eventFocus != '100 Individual Medley' &&
                                     element.eventFocus != '200 Individual Medley' &&
                                     element.eventFocus != '400 Individual Medley'">
-                                        <mat-label>Minutes</mat-label>
-                                        <input [(ngModel)]="element.minutesBest" matInput type="number" name="input"
-                                            min="0" max="60" required>
+                                    <mat-label>Minutes</mat-label>
+                                    <input [(ngModel)]="element.minutesBest" matInput type="number" name="input" min="0"
+                                        max="60" [formControl]="minuteControl" required>
+                                        <mat-error>Values 0-60 are valid.</mat-error>
                                     </mat-form-field>
 
-                                    <mat-form-field *ngIf="element.eventFocus != '100 Individual Medley' &&
+                                <mat-form-field *ngIf="element.eventFocus != '100 Individual Medley' &&
                                     element.eventFocus != '200 Individual Medley' &&
                                     element.eventFocus != '400 Individual Medley'">
-                                        <mat-label>Seconds</mat-label>
-                                        <input [(ngModel)]="element.secondsBest" matInput type="number" name="input"
-                                            min="0" max="60" required>
+                                    <mat-label>Seconds</mat-label>
+                                    <input [(ngModel)]="element.secondsBest" matInput type="number" name="input" min="0"
+                                        max="60" [formControl]="secondControl" required>
+                                        <mat-error>Values 0-60 are valid.</mat-error>
                                     </mat-form-field>
 
-                                    <h4>Enter split distance</h4>
+                                <h4>Enter split distance</h4>
 
-                                    <mat-form-field>
-                                        <mat-label>Distance</mat-label>
-                                        <input [(ngModel)]="element.distance" matInput type="number" required>
+                                <mat-form-field>
+                                    <mat-label>Distance</mat-label>
+                                    <input [(ngModel)]="element.distance" matInput type="number" name="input" min="0" max="60"
+                                        [formControl]="distanceControl" required>
+                                        <mat-error>This field is required.</mat-error>
                                     </mat-form-field>
 
-                                        <h4>Split Distance Type</h4>
-                                        <mat-form-field>
-                                            <mat-label>SCY/SCM/LCM</mat-label>
-                                            <select [(ngModel)]="element.splitDistanceType" matNativeControl required>
-                                                <option value="SCY">Short Course Yards</option>
-                                                <option value="SCM">Short Course Meters</option>
-                                                <option value="LCM">Long Course Meters</option>
-                                            </select>
-                                        </mat-form-field>
-                                    
+                                <h4>Practice pool configuration</h4>
+                                <mat-form-field>
+                                    <mat-label>SCY/SCM/LCM</mat-label>
+                                    <select [(ngModel)]="element.splitDistanceType" matNativeControl required>
+                                        <option value="SCY">Short Course Yards</option>
+                                        <option value="SCM">Short Course Meters</option>
+                                        <option value="LCM">Long Course Meters</option>
+                                    </select>
+                                </mat-form-field>
 
-                                    <h4>Hold within # seconds of personal record pace per
-                                        <strong>{{element.distance}}</strong>
-                                    </h4>
 
-                                    <mat-form-field>
-                                        <mat-label>e.g. within 2 seconds</mat-label>
-                                        <input [(ngModel)]="element.holdWithinPR" type="number" matInput required>
+                                <h4>Hold within # seconds of personal record pace per
+                                    <strong>{{element.distance}}</strong>
+                                </h4>
+
+                                <mat-form-field>
+                                    <mat-label>e.g. within 2 seconds</mat-label>
+                                    <input [(ngModel)]="element.holdWithinPR" type="number" matInput required>
+                                </mat-form-field>
+
+                                <h4>Number of {{element.distance}}s</h4>
+                                <mat-form-field>
+                                    <mat-label>Reps</mat-label>
+                                    <input matInput [(ngModel)]="element.reps" type="number" [formControl]="repsControl"
+                                        required>
+                                        <mat-error>This field is required.</mat-error>
                                     </mat-form-field>
 
-                                    <h4>Number of {{element.distance}}s</h4>
-                                    <mat-form-field>
-                                        <mat-label>Reps</mat-label>
-                                        <input matInput [(ngModel)]="element.reps" type="number" required>
-                                    </mat-form-field>
+                                <h4>Amount of rest between each {{element.distance}}</h4>
+                                <mat-form-field>
+                                    <mat-label>Seconds</mat-label>
+                                    <input [(ngModel)]="element.rest" matInput type="number">
+                                </mat-form-field>
 
-                                    <h4>Amount of rest between each {{element.distance}}</h4>
-                                    <mat-form-field>
-                                        <mat-label>Seconds</mat-label>
-                                        <input [(ngModel)]="element.rest" matInput type="number">
-                                    </mat-form-field>
+                                <h4>Or Target Interval</h4>
+                                <mat-form-field>
+                                    <mat-label>Minutes</mat-label>
+                                    <input [(ngModel)]="element.targetMinutesInterval" matInput type="number">
+                                </mat-form-field>
 
-                                    <h4>Or Target Interval</h4>
-                                    <mat-form-field>
-                                        <mat-label>Minutes</mat-label>
-                                        <input [(ngModel)]="element.targetMinutesInterval" matInput type="number">
-                                    </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Seconds</mat-label>
+                                    <input [(ngModel)]="element.targetSecondsInterval" matInput type="number">
+                                </mat-form-field>
 
-                                    <mat-form-field>
-                                        <mat-label>Seconds</mat-label>
-                                        <input [(ngModel)]="element.targetSecondsInterval" matInput type="number">
-                                    </mat-form-field>
+                                <h4>Edit Workout</h4>
+                                <button mat-raised-button color="accent" (click)="editWorkout(element)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
 
-                                    <h4>Edit Workout</h4>
-                                    <button mat-raised-button color="accent" (click)="editWorkout(element)">
-                                        <mat-icon>edit</mat-icon>
-                                    </button>
-
-                                </div>
                             </div>
-                        </td>
-                    </ng-container>
+                        </div>
+                    </td>
+                </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-                    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
-                        [class.example-expanded-row]="expandedElement === element"
-                        (click)="expandedElement = expandedElement === element ? null : element">
-                    </tr>
-                    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-                </table>
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+                    [class.example-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+            </table>
 
 
-                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-            </div>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
     </div>
 </div>
