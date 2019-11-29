@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
   reps: number;
   restString: string;
   rest: number;
-  holdWithinPR: number;
+  holdWithinPR = 0;
   targetMinutesInterval: number;
   targetSecondsInterval: number;
   personalRecord: string;
@@ -321,7 +321,7 @@ export class AppComponent implements OnInit {
 
   findTargetIMTime(divisor, flySplitMinutes, flySplitSeconds, backSplitMinutes, backSplitSeconds,
     breastSplitMinutes, breastSplitSeconds, freeSplitMinutes,
-    freeSplitSeconds, holdWithinPR, eventFocus, eventDistanceType, splitDistanceType): string {
+    freeSplitSeconds, holdWithinPR, eventFocus, eventDistanceType, splitDistanceType, splitDistance): string {
     let targetTime = "";
 
     let targetFly = (((flySplitMinutes * 60) + flySplitSeconds) / divisor) + holdWithinPR;
@@ -329,12 +329,10 @@ export class AppComponent implements OnInit {
     let targetBreast = (((breastSplitMinutes * 60) + breastSplitSeconds) / divisor) + holdWithinPR;
     let targetFree = (((freeSplitMinutes * 60) + freeSplitSeconds) / divisor) + holdWithinPR;
 
-   let eventDistance = eventFocus.replace(/\s/g, "").replace(/\D/g, "");  
-
-    targetFly = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetFly, eventDistance / 4);  
-    targetBack = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetBack, eventDistance / 4);  
-    targetBreast = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetBreast, eventDistance / 4);   
-    targetFree = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetFree, eventDistance / 4);  
+    targetFly = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetFly, splitDistance);  
+    targetBack = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetBack, splitDistance);  
+    targetBreast = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetBreast, splitDistance);   
+    targetFree = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetFree, splitDistance);  
 
     if (Number.isNaN(targetFly) ||
       Number.isNaN(targetBack) ||
@@ -358,16 +356,14 @@ export class AppComponent implements OnInit {
     return targetTime;
   }
 
-  findTargetTime(divisor, holdWithinPR, minutesBest, secondsBest, eventDistanceType, splitDistanceType, eventFocus): string {
+  findTargetTime(divisor, holdWithinPR, minutesBest, secondsBest, eventDistanceType, splitDistanceType, splitDistance): string {
     let targetTime = "";
 
     this.convertOtherTime(minutesBest, secondsBest);
 
     let targetTimeInit = (((minutesBest * 60) + secondsBest) / divisor) + holdWithinPR;
     
-    let eventDistance = eventFocus.replace(/\s/g, "").replace(/\D/g, "");
-    
-    targetTimeInit = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetTimeInit, eventDistance);
+    targetTimeInit = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetTimeInit, splitDistance);
 
     var m = Math.floor(targetTimeInit % 3600 / 60);
     var s = Math.round(((targetTimeInit % 3600 % 60) * 100)) / 100;
@@ -414,14 +410,14 @@ export class AppComponent implements OnInit {
         element.backSplitMinutes, element.backSplitSeconds,
         element.breastSplitMinutes, element.breastSplitSeconds,
         element.freeSplitMinutes, element.freeSplitSeconds, element.eventFocus,
-        element.holdWithinPR, element.eventDistanceType, element.splitDistanceType);
+        element.holdWithinPR, element.eventDistanceType, element.splitDistanceType, element.distance);
 
       element.personalRecord = element.bestIMTim;   
       this.verifyIMReps(element.reps, true);
     }
     else {
       this.finalTargetTime = this.findTargetTime(divisor, element.holdWithinPR, element.minutesBest,
-        element.secondsBest, element.eventDistanceType, element.splitDistanceType, element.eventFocus);
+        element.secondsBest, element.eventDistanceType, element.splitDistanceType, element.distance);
 
         element.personalRecord = this.personalRecord;
     }
@@ -502,11 +498,11 @@ export class AppComponent implements OnInit {
         this.backSplitMinutes, this.backSplitSeconds,
         this.breastSplitMinutes, this.breastSplitSeconds,
         this.freeSplitMinutes, this.freeSplitSeconds,
-        this.holdWithinPR, this.eventFocus, this.eventDistanceType, this.splitDistanceType);
+        this.holdWithinPR, this.eventFocus, this.eventDistanceType, this.splitDistanceType, this.distance);
       this.verifyIMReps(this.reps, false);
     }
     else {
-      this.finalTargetTime = this.findTargetTime(divisor, this.holdWithinPR, this.minutesBest, this.secondsBest, this.eventDistanceType, this.splitDistanceType, this.eventFocus);
+      this.finalTargetTime = this.findTargetTime(divisor, this.holdWithinPR, this.minutesBest, this.secondsBest, this.eventDistanceType, this.splitDistanceType, this.distance);
     }
 
     let id = this.dataSource.data.length;
@@ -552,9 +548,11 @@ export class AppComponent implements OnInit {
     }
   }
 
-  convertDistanceTime(eventDistanceType, splitDistanceType, eventBestTime, eventDistance) 
+  convertDistanceTime(eventDistanceType, splitDistanceType, eventBestTime, splitDistance) 
   {
-    let numTurns = eventDistance / 50;
+    console.log(splitDistance)
+
+    let numTurns = splitDistance / 50;
 
     if (eventDistanceType == "SCY")
     {
@@ -644,7 +642,7 @@ export class AppComponent implements OnInit {
               eventFocus: JSON.parse(line[2]),
               personalRecord: JSON.parse(line[3]),
               minutesBest: Number.parseInt(line[4]),
-              secondsBest: Number.parseInt(line[5]),
+              secondsBest: Math.round(Number.parseFloat(line[5]) * 100) / 100,
               distance: Number.parseInt(line[6]),
               reps: Number.parseInt(line[7]),
               restCol: JSON.parse(line[8]),
