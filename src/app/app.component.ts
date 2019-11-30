@@ -45,13 +45,13 @@ export class AppComponent implements OnInit {
   repsControl = new FormControl("", [Validators.required]);
   swimmerName = "";
   eventFocus = "50 Freestyle";
-  minutesBest: number;
-  secondsBest: number;
-  distance: number;
+  minutesBest = 0;
+  secondsBest = 0;
+  distance = 25;
   finalTargetTime: string;
-  reps: number;
+  reps = 0;
   restString: string;
-  rest: number;
+  rest = 0;
   holdWithinPR = 0;
   targetMinutesInterval: number;
   targetSecondsInterval: number;
