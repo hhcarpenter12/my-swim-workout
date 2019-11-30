@@ -18,13 +18,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { AppDialog } from './app-dialog/app-dialog';
 import {MatDialogModule} from '@angular/material/dialog';
 
-const appRoutes: Routes = [
-  { path: '',
-    redirectTo: '/my-swim-workout',
-    pathMatch: 'full'
-  },
-];
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,9 +32,6 @@ const appRoutes: Routes = [
     MatTableModule,
     MatDialogModule,
     MatPaginatorModule,
-    RouterModule.forRoot(
-      appRoutes
-    ),
     MatIconModule,
     AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule
   ],
