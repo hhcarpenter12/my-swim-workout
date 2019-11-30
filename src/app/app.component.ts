@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   title = 'Swim Workout Generator';
 
   ourFile: File; // hold our file
-  imagePath = '/assets/img/swimmingBackground.jpg'
+  imagePath = '/assets/swimmingBackground.jpg'
   flyMinuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
   flySecondControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
   backMinuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
