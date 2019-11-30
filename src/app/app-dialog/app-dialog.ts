@@ -160,7 +160,6 @@ import { FormControl, Validators } from '@angular/forms';
           }
 
           const myData = this.tableData.data.data;
-          console.log(myData);
 
           myData.push(workout);
           this.tableData.data.data = myData;
@@ -278,9 +277,7 @@ import { FormControl, Validators } from '@angular/forms';
       }
 
       convertDistanceTime(eventDistanceType, splitDistanceType, eventBestTime, splitDistance) 
-      {
-        console.log(splitDistance)
-    
+      {    
         let numTurns = splitDistance / 50;
     
         if (eventDistanceType == "SCY")

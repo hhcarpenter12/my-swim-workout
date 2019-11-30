@@ -2,6 +2,9 @@
 
 
 <div align='center'>
+
+    <div class="containerPhoto"></div>
+
     <article>
         <header>
             <h2>Swimming Race Pace Tracker</h2>
@@ -14,15 +17,19 @@
 
     <mat-divider style="height: 50px;"></mat-divider>
 
-    <div class="example-button-row">
+    <div class="row" style="margin: auto;">
 
-        <label>Download File as CSV</label>
-        <button mat-raised-button color="accent" (click)="downloadFile()">
+        <label>Download File as CSV &nbsp;</label>
+        <button mat-raised-button color="primary" (click)="downloadFile()">
             <mat-icon>cloud_download</mat-icon>
         </button>
 
-        <label>Import CSV File</label>
-        <input type="file" class="upload" (change)="changeListener($event.target.files)">
+        <label> &nbsp; Import CSV File &nbsp;</label>
+        
+        <button mat-raised-button color="primary" (click)="fileInput.click()">
+                <mat-icon>cloud_upload</mat-icon>
+                <input #fileInput type="file" (change)="changeListener($event.target.files)" style="display:none;" />
+              </button>
     </div>
 
     <mat-divider style="height: 50px;"></mat-divider>
@@ -87,7 +94,7 @@
                 <ng-container matColumnDef="delete">
                     <th mat-header-cell *matHeaderCellDef> Delete </th>
                     <td mat-cell *matCellDef="let element">
-                        <button mat-raised-button color="accent" (click)="deleteRow(element)">
+                        <button mat-raised-button color="primary" (click)="deleteRow(element)">
                             <mat-icon>delete</mat-icon>
                         </button>
                     </td>
@@ -332,7 +339,7 @@
                                 </mat-form-field>
 
                                 <h4>Edit Workout</h4>
-                                <button mat-raised-button color="accent" (click)="editWorkout(element)">
+                                <button mat-raised-button color="primary" (click)="editWorkout(element)">
                                     <mat-icon>edit</mat-icon>
                                 </button>
 
@@ -358,13 +365,11 @@
     <div class="container">
     <div class="content has-text-centered">
       <p>
-        Programmed and designed by Harry Carpenter - hhcarpenter12@gmail.com</a>
+        Programmed and designed by Harry Carpenter - hhcarpenter12@gmail.com
       </p>
     </div>
     </div>
 </footer>
-
-
 </div>
 
 

@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
   dataSource = new MatTableDataSource<Workout>(ELEMENT_DATA);
   title = 'Swim Workout Generator';
 
-
+  ourFile: File; // hold our file
   flyMinuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
   flySecondControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
   backMinuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
@@ -87,6 +87,7 @@ export class AppComponent implements OnInit {
   Free1650 = "1650 Freestyle";
   eventDistanceType = "SCY";
   splitDistanceType = "SCY";
+  imagePath = "assets/img/swimmingBackground.jpg";
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
@@ -414,10 +415,10 @@ export class AppComponent implements OnInit {
     });
   }
 
-
   public changeListener(files: FileList) {
     if (files && files.length > 0) {
       let file: File = files.item(0);
+      this.ourFile = file;
       let reader: FileReader = new FileReader();
       reader.readAsText(file);
       reader.onload = (e) => {
