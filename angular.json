@@ -21,8 +21,8 @@
             "aot": false,
 			"assets": [
                 {
-                  "glob": "**/*",
-                  "input": "src/assets",
+                  "glob": "/assets/",
+                  "input": "src",
                   "output": "/assets/"
                 },
                 {
