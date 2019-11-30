@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
   title = 'Swim Workout Generator';
 
   ourFile: File; // hold our file
+  imagePath = '/assets/img/swimmingBackground.jpg'
   flyMinuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
   flySecondControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
   backMinuteControl = new FormControl("", [Validators.max(60), Validators.min(0), Validators.required]);
@@ -87,7 +88,6 @@ export class AppComponent implements OnInit {
   Free1650 = "1650 Freestyle";
   eventDistanceType = "SCY";
   splitDistanceType = "SCY";
-  imagePath = "assets/img/swimmingBackground.jpg";
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 

@@ -4,6 +4,10 @@ table {
   width: 100%;
 }
 
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}
 
 tr.example-detail-row {
   height: 0;
@@ -16,12 +20,11 @@ tr.example-element-row:not(.example-expanded-row):hover {
 .containerPhoto {
   width: 100%;
   height: 200px;
-  background-image: url('/assets/img/swimmingBackground.jpg');
+  background-image: url("/assets/img/swimmingBackground.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50% 50%;
 }
-
 
 tr.example-element-row:not(.example-expanded-row):active {
   background: #efefef;
