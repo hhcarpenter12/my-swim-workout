@@ -20,7 +20,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 
 const appRoutes: Routes = [
   { path: '',
-    redirectTo: '/SwimWorkoutCreator',
+    redirectTo: '/my-swim-workout',
     pathMatch: 'full'
   },
 ];
