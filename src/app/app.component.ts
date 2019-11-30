@@ -20,7 +20,11 @@ import { AppDialog } from './app-dialog/app-dialog';
 })
 export class AppComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+
+  constructor(public dialog: MatDialog) {
+   }
+
+
 
   columnsToDisplay = ['swimmerName', 'eventFocus', 'eventDistanceType', 'personalRecord', 'distance', 'splitDistanceType',
     'reps', 'restCol', 'holdWithinPR', 'target', 'delete'];

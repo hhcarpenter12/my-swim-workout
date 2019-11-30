@@ -95,7 +95,7 @@ import { FormControl, Validators } from '@angular/forms';
             this.backSplitMinutes, this.backSplitSeconds,
             this.breastSplitMinutes, this.breastSplitSeconds,
             this.freeSplitMinutes, this.freeSplitSeconds,
-            this.holdWithinPR, this.eventFocus, this.eventDistanceType, this.splitDistanceType, this.distance);
+            this.holdWithinPR, this.eventDistanceType, this.splitDistanceType, this.distance);
         }
         else {
           this.finalTargetTime = this.findTargetTime(divisor, this.holdWithinPR, this.minutesBest, this.secondsBest, this.eventDistanceType, this.splitDistanceType, this.distance);
@@ -321,7 +321,7 @@ import { FormControl, Validators } from '@angular/forms';
 
       findTargetIMTime(divisor, flySplitMinutes, flySplitSeconds, backSplitMinutes, backSplitSeconds,
         breastSplitMinutes, breastSplitSeconds, freeSplitMinutes,
-        freeSplitSeconds, holdWithinPR, eventFocus, eventDistanceType, splitDistanceType, splitDistance): string {
+        freeSplitSeconds, holdWithinPR, eventDistanceType, splitDistanceType, splitDistance): string {
         let targetTime = "";
     
         let targetFly = (((flySplitMinutes * 60) + flySplitSeconds) / divisor) + holdWithinPR;

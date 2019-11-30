@@ -136,14 +136,7 @@
                                     element.eventFocus == '200 Individual Medley' ||
                                     element.eventFocus == '400 Individual Medley'">
                                     <mat-label>Fly split (seconds)</mat-label>
-                                    <input [(ngModel)]="element.flySplitSeconds" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
-                                                                                          element.flySplitSeconds,
-                                                                                          element.backSplitMinutes,
-                                                                                          element.backSplitSeconds,
-                                                                                          element.breastSplitMinutes,
-                                                                                          element.breastSplitSeconds,
-                                                                                          element.freeSplitMinutes,
-                                                                                          element.freeSplitSeconds)"
+                                    <input [(ngModel)]="element.flySplitSeconds" matInput type="number" (keyup)="convertIMTimeElement(element)"
                                         required min="0" max="60" [formControl]="flySecondControl">
                                         <mat-error>Values 0-60 are valid.</mat-error>
                                     </mat-form-field>
@@ -156,14 +149,7 @@
                                     element.eventFocus == '200 Individual Medley' ||
                                     element.eventFocus == '400 Individual Medley'">
                                     <mat-label>Back split (minutes)</mat-label>
-                                    <input [(ngModel)]="element.backSplitMinutes" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
-                                                                                          element.flySplitSeconds,
-                                                                                          element.backSplitMinutes,
-                                                                                          element.backSplitSeconds,
-                                                                                          element.breastSplitMinutes,
-                                                                                          element.breastSplitSeconds,
-                                                                                          element.freeSplitMinutes,
-                                                                                          element.freeSplitSeconds)"
+                                    <input [(ngModel)]="element.backSplitMinutes" matInput type="number" (keyup)="convertIMTimeElement(element)"
                                         required min="0" max="60" [formControl]="backMinuteControl">
                                         <mat-error>Values 0-60 are valid.</mat-error>
                                     </mat-form-field>
@@ -172,14 +158,7 @@
                                     element.eventFocus == '200 Individual Medley' ||
                                     element.eventFocus == '400 Individual Medley'">
                                     <mat-label>Back split (seconds)</mat-label>
-                                    <input [(ngModel)]="element.backSplitSeconds" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
-                                                                                          element.flySplitSeconds,
-                                                                                          element.backSplitMinutes,
-                                                                                          element.backSplitSeconds,
-                                                                                          element.breastSplitMinutes,
-                                                                                          element.breastSplitSeconds,
-                                                                                          element.freeSplitMinutes,
-                                                                                          element.freeSplitSeconds)"
+                                    <input [(ngModel)]="element.backSplitSeconds" matInput type="number" (keyup)="convertIMTimeElement(element)"
                                         required min="0" max="60" [formControl]="backSecondControl">
                                         <mat-error>Values 0-60 are valid.</mat-error>
                                     </mat-form-field>
@@ -192,14 +171,7 @@
                                     element.eventFocus == '200 Individual Medley' ||
                                     element.eventFocus == '400 Individual Medley'">
                                     <mat-label>Breast split (minutes)</mat-label>
-                                    <input [(ngModel)]="element.breastSplitMinutes" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
-                                                                                          element.flySplitSeconds,
-                                                                                          element.backSplitMinutes,
-                                                                                          element.backSplitSeconds,
-                                                                                          element.breastSplitMinutes,
-                                                                                          element.breastSplitSeconds,
-                                                                                          element.freeSplitMinutes,
-                                                                                          element.freeSplitSeconds)"
+                                    <input [(ngModel)]="element.breastSplitMinutes" matInput type="number" (keyup)="convertIMTimeElement(element)"
                                         required min="0" max="60" [formControl]="breastMinuteControl">
                                         <mat-error>Values 0-60 are valid.</mat-error>
                                     </mat-form-field>
@@ -208,14 +180,7 @@
                                     element.eventFocus == '200 Individual Medley' ||
                                     element.eventFocus == '400 Individual Medley'">
                                     <mat-label>Breast split (seconds)</mat-label>
-                                    <input [(ngModel)]="element.breastSplitSeconds" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
-                                                                                          element.flySplitSeconds,
-                                                                                          element.backSplitMinutes,
-                                                                                          element.backSplitSeconds,
-                                                                                          element.breastSplitMinutes,
-                                                                                          element.breastSplitSeconds,
-                                                                                          element.freeSplitMinutes,
-                                                                                          element.freeSplitSeconds)"
+                                    <input [(ngModel)]="element.breastSplitSeconds" matInput type="number" (keyup)="convertIMTimeElement(element)"
                                         required min="0" max="60" [formControl]="breastSecondControl">
                                         <mat-error>Values 0-60 are valid.</mat-error>
                                     </mat-form-field>
@@ -228,14 +193,7 @@
                                     element.eventFocus == '200 Individual Medley' ||
                                     element.eventFocus == '400 Individual Medley'">
                                     <mat-label>Free split (minutes)</mat-label>
-                                    <input [(ngModel)]="element.freeSplitMinutes" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
-                                                                                          element.flySplitSeconds,
-                                                                                          element.backSplitMinutes,
-                                                                                          element.backSplitSeconds,
-                                                                                          element.breastSplitMinutes,
-                                                                                          element.breastSplitSeconds,
-                                                                                          element.freeSplitMinutes,
-                                                                                          element.freeSplitSeconds)"
+                                    <input [(ngModel)]="element.freeSplitMinutes" matInput type="number" (keyup)="convertIMTimeElement(element)"
                                         required min="0" max="60" [formControl]="freeMinuteControl">
                                         <mat-error>Values 0-60 are valid.</mat-error>
                                 </mat-form-field>
@@ -244,14 +202,7 @@
                                     element.eventFocus == '200 Individual Medley' ||
                                     element.eventFocus == '400 Individual Medley'">
                                     <mat-label>Free split (seconds)</mat-label>
-                                    <input [(ngModel)]="element.freeSplitSeconds" matInput type="number" (keyup)="convertIMTime(element.flySplitMinutes,
-                                                                                          element.flySplitSeconds,
-                                                                                          element.backSplitMinutes,
-                                                                                          element.backSplitSeconds,
-                                                                                          element.breastSplitMinutes,
-                                                                                          element.breastSplitSeconds,
-                                                                                          element.freeSplitMinutes,
-                                                                                          element.freeSplitSeconds)"
+                                    <input [(ngModel)]="element.freeSplitSeconds" matInput type="number" (keyup)="convertIMTimeElement(element)"
                                         required min="0" max="60" [formControl]="freeSecondControl">
                                         <mat-error>Values 0-60 are valid.</mat-error>
                                     </mat-form-field>
@@ -366,6 +317,9 @@
     <div class="content has-text-centered">
       <p>
         Programmed and designed by Harry Carpenter - hhcarpenter12@gmail.com
+      </p>
+      <p>
+        &nbsp;
       </p>
     </div>
     </div>
