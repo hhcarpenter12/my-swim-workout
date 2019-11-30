@@ -20,7 +20,7 @@
             "tsConfig": "tsconfig.app.json",
             "aot": false,
 			"assets": [
-                { "glob": "**/*", "input": "src/assets/", "output": "/assets/" },
+                { "glob": "swimmingBackground.jpg", "input": "src/", "output": "/" },
 				{ "glob": "favicon.ico", "input": "src/", "output": "/" },
               ],
             "styles": [
