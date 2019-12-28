@@ -13,7 +13,6 @@
 
     <button mat-raised-button color="primary" (click)="openDialog()">Add Workout</button>
 
-
     <mat-divider style="height: 50px;"></mat-divider>
 
     <div class="row" style="margin: auto;">
@@ -93,7 +92,7 @@
                                     <mat-error>This field is required.</mat-error>
                                 </mat-form-field>
 
-                                
+
                                 <h4>Time trial time</h4>
 
                                 <mat-form-field>
@@ -153,14 +152,14 @@
 
                                 <h4>Effort level</h4>
                                 <mat-form-field>
-                                        <mat-label>Effort</mat-label>
-                                        <select [(ngModel)]="element.effort" matNativeControl required>
-                                            <option value="white">White - Easy</option>
-                                            <option value="pink">Pink - Moderate</option>
-                                            <option value="red">Red- Endurance</option>
-                                            <option value="blue">Blue - Threshold</option>
-                                            <option value="purple">Purple - Race Pace</option>
-                                        </select>
+                                    <mat-label>Effort</mat-label>
+                                    <select [(ngModel)]="element.effort" matNativeControl required>
+                                        <option value="white">White - Easy</option>
+                                        <option value="pink">Pink - Moderate</option>
+                                        <option value="red">Red- Endurance</option>
+                                        <option value="blue">Blue - Threshold</option>
+                                        <option value="purple">Purple - Race Pace</option>
+                                    </select>
                                 </mat-form-field>
 
                                 <h4 *ngIf="element.effort=='white'">Pace: <strong>{{element.white}}</strong></h4>

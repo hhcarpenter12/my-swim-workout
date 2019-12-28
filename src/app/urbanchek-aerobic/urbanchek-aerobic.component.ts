@@ -346,19 +346,17 @@ export class AerobicTrainingComponent implements OnInit {
       this.restString = element.rest + " seconds";
     }
 
-    if (element.rest == undefined &&
+    if (element.rest == undefined ||
       (element.targetMinutesInterval == undefined ||
         element.targetSecondsInterval == undefined)) {
       element.rest = 0;
-      element.targetMinutesInterval = undefined;
-      element.targetSecondsInterval = undefined;
+      element.targetMinutesInterval = 0;
+      element.targetSecondsInterval = 0;
     }
 
     let id = element.id;
 
     element.targetTime = this.finalTargetTime;
-    element.restCol = this.restString;
-
 
     let workout = {
       id: id,
@@ -369,7 +367,6 @@ export class AerobicTrainingComponent implements OnInit {
       secondsBest: element.secondsBest,
       distance: element.distance,
       reps: element.reps,
-      restCol: element.restString,
       rest: element.rest,
       targetMinutesInterval: element.targetMinutesInterval,
       targetSecondsInterval: element.targetSecondsInterval,
@@ -452,17 +449,16 @@ export class AerobicTrainingComponent implements OnInit {
             secondsBest: Math.round(Number.parseFloat(line[5]) * 100) / 100,
             distance: JSON.parse(line[6]),
             reps: Number.parseInt(line[7]),
-            restCol: JSON.parse(line[8]),
-            rest: Number.parseInt(line[9]),
-            targetMinutesInterval: Number.parseInt(line[10]),
-            targetSecondsInterval: Number.parseInt(line[11]),
-            target: JSON.parse(line[12]),
-            white: JSON.parse(line[13]),
-            pink: JSON.parse(line[14]),
-            red: JSON.parse(line[15]),
-            blue: JSON.parse(line[16]),
-            purple: JSON.parse(line[17]),
-            effort: JSON.parse(line[18])
+            rest: Number.parseInt(line[8]),
+            targetMinutesInterval: Number.parseInt(line[9]),
+            targetSecondsInterval: Number.parseInt(line[10]),
+            target: JSON.parse(line[11]),
+            white: JSON.parse(line[12]),
+            pink: JSON.parse(line[13]),
+            red: JSON.parse(line[14]),
+            blue: JSON.parse(line[15]),
+            purple: JSON.parse(line[16]),
+            effort: JSON.parse(line[17])
           }
 
           const data = this.dataSource.data;
@@ -485,7 +481,6 @@ export interface Workout {
   distance: number;
   reps: number;
   rest: number;
-  restCol: string;
   targetMinutesInterval: number;
   targetSecondsInterval: number;
   target: string;

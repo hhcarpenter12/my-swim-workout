@@ -22,7 +22,7 @@ export class RacePaceTrackerComponent implements OnInit {
 
 
   constructor(public dialog: MatDialog) {
-   }
+  }
 
 
   columnsToDisplay = ['swimmerName', 'eventFocus', 'eventDistanceType', 'personalRecord', 'delete'];
@@ -245,7 +245,7 @@ export class RacePaceTrackerComponent implements OnInit {
       targetBreast + " Breast / " + targetFree + " Free";
 
     this.convertIMTime(flySplitMinutes, flySplitSeconds, backSplitMinutes, backSplitSeconds, breastSplitMinutes, breastSplitSeconds, freeSplitMinutes, freeSplitSeconds);
-    
+
     this.personalRecord = this.bestIMTim;
 
     return targetTime;
