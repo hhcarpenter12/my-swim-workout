@@ -18,12 +18,12 @@
 
     <div class="row" style="margin: auto;">
 
-        <label>Download File as CSV &nbsp;</label>
+        <label>Download file as CSV &nbsp;</label>
         <button mat-raised-button color="primary" (click)="downloadFile()">
             <mat-icon>cloud_download</mat-icon>
         </button>
 
-        <label> &nbsp; Import CSV File &nbsp;</label>
+        <label> &nbsp; Import CSV file &nbsp;</label>
 
         <button mat-raised-button color="primary" (click)="fileInput.click()">
             <mat-icon>cloud_upload</mat-icon>
@@ -72,7 +72,7 @@
                             [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
                             <div class="example-element-diagram">
 
-                                <h4>Swimmer Name</h4>
+                                <h4>Swimmer name</h4>
 
                                 <mat-form-field>
                                     <mat-label>Name</mat-label>
@@ -94,7 +94,7 @@
                                 </mat-form-field>
 
                                 
-                                <h4>Time Trial time</h4>
+                                <h4>Time trial time</h4>
 
                                 <mat-form-field>
                                     <mat-label>Minutes</mat-label>
@@ -140,7 +140,7 @@
                                     <input [(ngModel)]="element.rest" matInput type="number">
                                 </mat-form-field>
 
-                                <h4>Or Target Interval</h4>
+                                <h4>Or target interval</h4>
                                 <mat-form-field>
                                     <mat-label>Minutes</mat-label>
                                     <input [(ngModel)]="element.targetMinutesInterval" matInput type="number">
@@ -151,7 +151,7 @@
                                     <input [(ngModel)]="element.targetSecondsInterval" matInput type="number">
                                 </mat-form-field>
 
-                                <h4>Effort Level</h4>
+                                <h4>Effort level</h4>
                                 <mat-form-field>
                                         <mat-label>Effort</mat-label>
                                         <select [(ngModel)]="element.effort" matNativeControl required>

@@ -13,7 +13,7 @@
     </div>
     
     <div class="row">
-        <h4>Freestyle Time Trial Distance</h4>
+        <h4>Time trial distance</h4>
     </div>
 
     <div class="row">
@@ -31,7 +31,7 @@
     </div>
         
         <div class="row">
-            <h4>Time Trial time</h4>
+            <h4>Time trial time</h4>
         </div>
 
         <div class="row">
@@ -80,7 +80,7 @@
             </div>
 
             <div class="row" *ngIf="distance != undefined">
-                    <h4>Effort Level</h4>
+                    <h4>Effort level</h4>
                     <mat-form-field>
                             <mat-label>Effort</mat-label>
                             <select [(ngModel)]="effort" matNativeControl required>
@@ -102,7 +102,7 @@
             </div>
     
             <div class="row"  *ngIf="distance != undefined">
-                <h4>Or Target Interval</h4>
+                <h4>Or target interval</h4>
                 <mat-form-field>
                     <mat-label>Minutes</mat-label>
                     <input [(ngModel)]="targetMinutesInterval" matInput type="number">
