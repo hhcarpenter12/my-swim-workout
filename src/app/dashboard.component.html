@@ -1,76 +1,77 @@
 <div align='center'>
 
-        <div class="containerPhoto"></div>
-    
-        <article>
-            <header>
-                <h2>Swimming Workout Tools</h2>
-            </header>
-        </article>
-    
-    <mat-card class="example-card">
-        <mat-card-header>
-            <div mat-card-avatar class="example-header-image"></div>
-          <mat-card-title>Race Pace Tracker</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-    
-          <button mat-button (click)="toggleRPT()">Details</button>
-          
-          <p *ngIf="showRPT">
-            Based on your best time, the app determines the target splits for an entered distance.
-             Then, it converts them based on the pool configuration (short course yards, short course meters, long course meters). 
-             It also considers target splits for individual medley (butterfly, backstroke, breastroke, freestyle) events. 
-             Then, you can enter the number of repetitions, the amount of rest between each repetition, and the pace to hold within each repetition. 
-             You can also import/export CSV files, so you can update personal bests and other information about the workout. 
-          </p>
-        </mat-card-content>
-        <mat-card-actions>
-            <button mat-raised-button color="primary" (click)="navigateToRPT()" routerLinkActive="active"><mat-icon>keyboard_arrow_right</mat-icon>
-            </button>
-            </mat-card-actions>
-    
-    </mat-card>
-    
-    <mat-card class="example-card">
-      <mat-card-header>
-          <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>Jon Urbanchek Aerobic Training</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <button mat-button (click)="toggleJU()">Details</button>
-        
-        <p *ngIf="showJU">
-          Based on your trial time, the app determines pacing for five different levels of effort in practice: white (easy), pink (moderate), red (endurance), blue (threshold), purple (race pace).
-          You can also import/export CSV files, so you can update time trial information and receive adjusted pacing. These workouts are inspired by Jon Urbanchek, Head Coach of the University of Michigan
-           Swimming and Diving Team from 1982 to 2004. 
+  <div class="containerPhoto"></div>
+
+  <article>
+    <header>
+      <h2>Swimming Workout Tools</h2>
+    </header>
+  </article>
+
+  <mat-card class="example-card">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Race Pace Tracker</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+      <button mat-button (click)="toggleRPT()">Details</button>
+
+      <p *ngIf="showRPT">
+        Based on your best time for your selected event, the app determines the target split for an entered distance.
+        Then, the app converts that target split based on the pool configuration (short course yards, short course
+        meters, long course meters)
+        in case the practice and competition pools have different configurations. The app also considers target splits
+        for individual medley (butterfly, backstroke, breastroke, freestyle) events.
+        Then, you can enter the number of repetitions, the amount of rest between each repetition, and the pace to hold
+        within each repetition.
+        You can also import/export CSV files, so you can update personal bests and other information about the workout.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="navigateToRPT()" routerLinkActive="active">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </mat-card-actions>
+
+  </mat-card>
+
+  <mat-card class="example-card">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Jon Urbanchek Aerobic Training</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <button mat-button (click)="toggleJU()">Details</button>
+
+      <p *ngIf="showJU">
+        Based on your trial time for your selected distance, the app determines pacing for five levels of effort in
+        practice: white (easy), pink (moderate), red (endurance), blue (threshold), purple (race pace).
+        You can also import/export CSV files, so you can update time trial information and receive adjusted pacing.
+        These workouts are inspired by Jon Urbanchek, Head Coach of the University of Michigan
+        Swimming and Diving Team from 1982 to 2004.
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="navigateToJU()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="content has-text-centered">
+        <p>
+          Programmed and designed by Harry Carpenter - hhcarpenter12@gmail.com
         </p>
-      </mat-card-content>
-      <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="navigateToJU()"><mat-icon>keyboard_arrow_right</mat-icon>
-          </button>
-      </mat-card-actions>
-    </mat-card>
+        <p>
+          &nbsp;
+        </p>
+      </div>
+    </div>
+  </footer>
 
-    <footer class="footer">
-        <div class="container">
-        <div class="content has-text-centered">
-          <p>
-            Programmed and designed by Harry Carpenter - hhcarpenter12@gmail.com
-          </p>
-          <p>
-            &nbsp;
-          </p>
-        </div>
-        </div>
-    </footer>
+</div>
 
-  </div>
-
-    <router-outlet></router-outlet> 
-    
-    
-    
-    
-    
-    
+<router-outlet></router-outlet>
