@@ -7,9 +7,9 @@ import { AerobicTrainingComponent } from './urbanchek-aerobic/urbanchek-aerobic.
 
 const routes: Routes = [
   {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-  {path: 'dashboard', component: DashboardComponent},
-  {path:'race-pace-tracker', component: RacePaceTrackerComponent},
-  {path:'urbanchek-aerobic', component: AerobicTrainingComponent}
+  {path: 'dashboard', component: DashboardComponent, pathMatch: 'full'},
+  {path:'race-pace-tracker', component: RacePaceTrackerComponent, pathMatch: 'full'},
+  {path:'urbanchek-aerobic', component: AerobicTrainingComponent, pathMatch: 'full'}
 ];
 
 @NgModule({
