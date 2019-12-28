@@ -4,12 +4,12 @@ import { FormControl, Validators } from '@angular/forms';
 
 
 @Component({
-    selector: 'app-dialog',
-    templateUrl: './app-dialog.html',
+    selector: 'race-pace-tracker-dialog',
+    templateUrl: './race-pace-tracker-dialog.html',
   })
-  export class AppDialog {
+  export class RacePaceTrackerDialog {
   
-    constructor(public dialogRef: MatDialogRef<AppDialog>,
+    constructor(public dialogRef: MatDialogRef<RacePaceTrackerDialog>,
         @Inject(MAT_DIALOG_DATA) public tableData: any) {
 
         }

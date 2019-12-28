@@ -1,10 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { MatButtonModule } from '@angular/material';
+import { MatButtonModule, MatCardModule } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -15,19 +14,27 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { AppDialog } from './app-dialog/app-dialog';
+import { RacePaceTrackerComponent} from './race-pace-tracker/race-pace-tracker.component';
+import { RacePaceTrackerDialog } from './race-pace-tracker/race-pace-tracker-dialog/race-pace-tracker-dialog';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatTabsModule} from '@angular/material/tabs';
+import { routingComponents } from './app-routing.module';
+import { UrbanchekAerobicDialog } from './urbanchek-aerobic/urbanchek-aerobic/urbanchek-aerobic-dialog';
+
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AppDialog
+    routingComponents,
+    RacePaceTrackerDialog,
+    UrbanchekAerobicDialog
   ],
   imports: [
     BrowserModule,
     MatFormFieldModule,
     MatInputModule,
     MatDividerModule,
+    MatCardModule,
+    MatTabsModule,
     MatButtonModule,
     MatTableModule,
     MatDialogModule,
@@ -35,9 +42,10 @@ import {MatDialogModule} from '@angular/material/dialog';
     MatIconModule,
     AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule
   ],
+
   providers: [FormsModule],
   bootstrap: [AppComponent],
-  entryComponents: [AppDialog]
+  entryComponents: [RacePaceTrackerDialog, UrbanchekAerobicDialog]
 })
 
 export class AppModule { }

@@ -1,0 +1,214 @@
+<router-outlet name="rpt"></router-outlet>
+
+<div align='center'>
+
+    <div class="containerPhoto"></div>
+
+    <article>
+        <header>
+            <h2>Aerobic Training</h2>
+            <h3>5 Levels of Effort Inspired by Jon Urbanchek</h3>
+        </header>
+    </article>
+
+    <button mat-raised-button color="primary" (click)="openDialog()">Add Workout</button>
+
+
+    <mat-divider style="height: 50px;"></mat-divider>
+
+    <div class="row" style="margin: auto;">
+
+        <label>Download File as CSV &nbsp;</label>
+        <button mat-raised-button color="primary" (click)="downloadFile()">
+            <mat-icon>cloud_download</mat-icon>
+        </button>
+
+        <label> &nbsp; Import CSV File &nbsp;</label>
+
+        <button mat-raised-button color="primary" (click)="fileInput.click()">
+            <mat-icon>cloud_upload</mat-icon>
+            <input #fileInput type="file" (change)="changeListener($event.target.files)" style="display:none;" />
+        </button>
+    </div>
+
+    <mat-divider style="height: 50px;"></mat-divider>
+
+    <div class="row">
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
+
+                <ng-container matColumnDef="swimmerName" cdkColumnDef="userId">
+                    <th mat-header-cell *matHeaderCellDef>Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.swimmerName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="reps" cdkColumnDef="reps">
+                    <th mat-header-cell *matHeaderCellDef>Reps</th>
+                    <td mat-cell *matCellDef="let element"> {{element.reps}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="distance" cdkColumnDef="distance">
+                    <th mat-header-cell *matHeaderCellDef>Distance</th>
+                    <td mat-cell *matCellDef="let element"> {{element.distance}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="effort" cdkColumnDef="effort">
+                    <th mat-header-cell *matHeaderCellDef>Effort</th>
+                    <td mat-cell *matCellDef="let element"> {{element.effort}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="delete" cdkColumnDef="userId">
+                    <th mat-header-cell *matHeaderCellDef> Delete </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button color="primary" (click)="deleteRow(element)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+                        <div class="example-element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <div class="example-element-diagram">
+
+                                <h4>Swimmer Name</h4>
+
+                                <mat-form-field>
+                                    <mat-label>Name</mat-label>
+                                    <input [(ngModel)]="element.swimmerName" matInput type="text">
+                                </mat-form-field>
+
+                                <h4>Time trial distance</h4>
+
+                                <mat-form-field>
+                                    <mat-label>Distance</mat-label>
+                                    <select [(ngModel)]="element.timeTrialDistance" matNativeControl required>
+                                        <option value="200">200</option>
+                                        <option value="300">300</option>
+                                        <option value="400">400</option>
+                                        <option value="500">500</option>
+                                        <option value="2000">2000</option>
+                                    </select>
+                                    <mat-error>This field is required.</mat-error>
+                                </mat-form-field>
+
+                                
+                                <h4>Time Trial time</h4>
+
+                                <mat-form-field>
+                                    <mat-label>Minutes</mat-label>
+                                    <input [(ngModel)]="element.minutesBest" matInput type="number" min="0" max="60"
+                                        [formControl]="minuteControl" required>
+                                    <mat-error>Values 0-60 are valid.</mat-error>
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <mat-label>Seconds</mat-label>
+                                    <input [(ngModel)]="element.secondsBest" matInput type="number" min="0" max="60"
+                                        [formControl]="secondControl" required>
+                                    <mat-error>Values 0-60 are valid.</mat-error>
+                                </mat-form-field>
+
+                                <h4>Select split distance</h4>
+
+                                <mat-form-field>
+                                    <mat-label>Distance</mat-label>
+                                    <select [(ngModel)]="element.distance" matNativeControl required>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                        <option value="150">150</option>
+                                        <option value="200">200</option>
+                                        <option value="300">300</option>
+                                        <option value="400">400</option>
+                                        <option value="500">500</option>
+                                    </select>
+                                    <mat-error>This field is required.</mat-error>
+                                </mat-form-field>
+
+                                <h4>Number of {{element.distance}}s</h4>
+                                <mat-form-field>
+                                    <mat-label>Reps</mat-label>
+                                    <input matInput [(ngModel)]="element.reps" type="number" [formControl]="repsControl"
+                                        required>
+                                    <mat-error>This field is required.</mat-error>
+                                </mat-form-field>
+
+                                <h4>Amount of rest between each {{element.distance}}</h4>
+                                <mat-form-field>
+                                    <mat-label>Seconds</mat-label>
+                                    <input [(ngModel)]="element.rest" matInput type="number">
+                                </mat-form-field>
+
+                                <h4>Or Target Interval</h4>
+                                <mat-form-field>
+                                    <mat-label>Minutes</mat-label>
+                                    <input [(ngModel)]="element.targetMinutesInterval" matInput type="number">
+                                </mat-form-field>
+
+                                <mat-form-field>
+                                    <mat-label>Seconds</mat-label>
+                                    <input [(ngModel)]="element.targetSecondsInterval" matInput type="number">
+                                </mat-form-field>
+
+                                <h4>Effort Level</h4>
+                                <mat-form-field>
+                                        <mat-label>Effort</mat-label>
+                                        <select [(ngModel)]="element.effort" matNativeControl required>
+                                                <option value="white">White - Easy</option>
+                                                <option value="pink">Pink - Moderate</option>
+                                                <option value="red">Red- Threshold</option>
+                                                <option value="blue">Blue - Best Effort</option>
+                                                <option value="purple">Purple - Race Pace</option>
+                                            </select>
+                                </mat-form-field>
+
+                                <h4 *ngIf="element.effort=='white'">Pace: <strong>{{element.white}}</strong></h4>
+
+                                <h4 *ngIf="element.effort=='pink'">Pace: <strong>{{element.pink}}</strong></h4>
+
+                                <h4 *ngIf="element.effort=='red'">Pace: <strong>{{element.red}}</strong></h4>
+
+                                <h4 *ngIf="element.effort=='blue'">Pace: <strong>{{element.blue}}</strong></h4>
+
+                                <h4 *ngIf="element.effort=='purple'">Pace: <strong>{{element.purple}}</strong></h4>
+
+
+
+
+                                <h4>Edit Workout</h4>
+                                <button mat-raised-button color="primary" (click)="editWorkout(element)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+                    [class.example-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+            </table>
+
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="content has-text-centered">
+                <p>
+                    Programmed and designed by Harry Carpenter - hhcarpenter12@gmail.com
+                </p>
+                <p>
+                    &nbsp;
+                </p>
+            </div>
+        </div>
+    </footer>
+</div>

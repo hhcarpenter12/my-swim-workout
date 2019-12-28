@@ -1,0 +1,126 @@
+<mat-dialog-content>
+  
+
+    <div class="row">
+        <h4>Swimmer name</h4>
+    </div>
+
+    <div class="row">
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input [(ngModel)]="swimmerName" matInput type="text">
+        </mat-form-field>
+    </div>
+    
+    <div class="row">
+        <h4>Freestyle Time Trial Distance</h4>
+    </div>
+
+    <div class="row">
+        <mat-form-field>
+                <mat-label>Distance</mat-label>
+                <select [(ngModel)]="timeTrialDistance" matNativeControl required>
+                        <option value="200">200</option>
+                        <option value="300">300</option>
+                        <option value="400">400</option>
+                        <option value="500">500</option>
+                        <option value="2000">2000</option>
+                    </select>
+                <mat-error>This field is required.</mat-error>
+            </mat-form-field>
+    </div>
+        
+        <div class="row">
+            <h4>Time Trial time</h4>
+        </div>
+
+        <div class="row">
+            <mat-form-field>
+                <mat-label>Minutes</mat-label>
+                <input [(ngModel)]="minutesBest" matInput type="number" min="0" max="60" [formControl]="minuteControl" required>
+                <mat-error>Values 0-60 are valid.</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="row">
+            <mat-form-field>
+                <mat-label>Seconds</mat-label>
+                <input [(ngModel)]="secondsBest" matInput type="number" min="0" max="60" [formControl]="secondControl" required>
+                <mat-error>Values 0-60 are valid.</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="row">
+                <h4>Select split distance</h4>
+            </div>
+
+        <div class="row">
+                <mat-form-field>
+                    <mat-label>Distance</mat-label>
+                    <select [(ngModel)]="distance" matNativeControl required>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="150">150</option>
+                            <option value="200">200</option>
+                            <option value="300">300</option>
+                            <option value="400">400</option>
+                            <option value="500">500</option>
+                        </select>
+                    <mat-error>This field is required.</mat-error>
+                </mat-form-field>
+            </div>
+
+        <div class="row" *ngIf="distance != undefined">
+                <h4>Number of {{distance}}s</h4>
+                <mat-form-field>
+                    <mat-label>Reps</mat-label>
+                    <input matInput [(ngModel)]="reps" type="number" [formControl]="repsControl" required>
+                    <mat-error>This field is required.</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="row" *ngIf="distance != undefined">
+                    <h4>Effort Level</h4>
+                    <mat-form-field>
+                            <mat-label>Effort</mat-label>
+                            <select [(ngModel)]="effort" matNativeControl required>
+                                    <option value="white">White - Easy</option>
+                                    <option value="pink">Pink - Moderate</option>
+                                    <option value="red">Red- Threshold</option>
+                                    <option value="blue">Blue - Best Effort</option>
+                                    <option value="purple">Purple - Race Pace</option>
+                                </select>
+                    </mat-form-field>
+                </div>
+
+            <div class="row" *ngIf="distance != undefined">
+                <h4>Amount of rest between each {{distance}}</h4>
+                <mat-form-field>
+                    <mat-label>Seconds</mat-label>
+                    <input [(ngModel)]="rest" matInput type="number">
+                </mat-form-field>
+            </div>
+    
+            <div class="row"  *ngIf="distance != undefined">
+                <h4>Or Target Interval</h4>
+                <mat-form-field>
+                    <mat-label>Minutes</mat-label>
+                    <input [(ngModel)]="targetMinutesInterval" matInput type="number">
+                </mat-form-field>
+            </div>
+    
+            <div class="row" *ngIf="distance != undefined"> 
+                <mat-form-field>
+                    <mat-label>Seconds</mat-label>
+                    <input [(ngModel)]="targetSecondsInterval" matInput type="number">
+                </mat-form-field>
+            </div>
+
+
+
+        <div class="example-button-row">
+            <button mat-flat-button color="primary" type="submit" (click)="generateWorkout()">Create Workout</button>
+        </div>
+
+
+    </mat-dialog-content>  
