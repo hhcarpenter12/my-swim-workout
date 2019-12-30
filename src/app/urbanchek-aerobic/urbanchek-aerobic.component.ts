@@ -397,7 +397,7 @@ export class AerobicTrainingComponent implements OnInit {
       url = window.URL.createObjectURL(blob);
 
     a.href = url;
-    a.download = "swimWorkout.csv";
+    a.download = "urbanchekAerobic.csv";
     a.click();
     window.URL.revokeObjectURL(url);
     a.remove();

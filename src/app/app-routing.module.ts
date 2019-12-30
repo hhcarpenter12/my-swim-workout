@@ -4,12 +4,14 @@ import { RacePaceTrackerComponent } from './race-pace-tracker/race-pace-tracker.
 import { DashboardComponent } from 'src/app/dashboard.component';
 import { AppComponent } from './app.component';
 import { AerobicTrainingComponent } from './urbanchek-aerobic/urbanchek-aerobic.component';
+import { WorkoutTimeTrackerComponent } from './workout-time-tracker/workout-time-tracker.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: 'dashboard', component: DashboardComponent, pathMatch: 'full' },
   { path: 'race-pace-tracker', component: RacePaceTrackerComponent, pathMatch: 'full' },
-  { path: 'urbanchek-aerobic', component: AerobicTrainingComponent, pathMatch: 'full' }
+  { path: 'urbanchek-aerobic', component: AerobicTrainingComponent, pathMatch: 'full' },
+  { path: 'workout-time-tracker', component: WorkoutTimeTrackerComponent, pathMatch: 'full'}
 ];
 
 @NgModule({
@@ -17,4 +19,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents = [DashboardComponent, RacePaceTrackerComponent, AppComponent, AerobicTrainingComponent]
+export const routingComponents = [DashboardComponent, RacePaceTrackerComponent, AppComponent, AerobicTrainingComponent, WorkoutTimeTrackerComponent
+]

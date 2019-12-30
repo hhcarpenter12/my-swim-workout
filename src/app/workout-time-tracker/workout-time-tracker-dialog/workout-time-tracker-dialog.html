@@ -1,0 +1,80 @@
+<mat-dialog-content>
+    <div class="row">
+        <h4>Workout name</h4>
+    </div>
+
+    <div class="row">
+        <mat-form-field>
+            <mat-label>Workout Name</mat-label>
+            <input [(ngModel)]="workoutName" matInput type="text">
+        </mat-form-field>
+    </div>
+
+    <h4>Add Set</h4>
+
+    <div class="row">
+        <mat-form-field>
+            <mat-label>Reps</mat-label>
+            <input [(ngModel)]="Reps" matInput (keyup.enter)="Reps=''" type="number" class="textfield" name="Reps">
+        </mat-form-field>
+    </div>
+
+    <div class="row">
+        <mat-form-field>
+            <mat-label>Distance</mat-label>
+            <input [(ngModel)]="Distance" matInput (keyup.enter)="Distance=''" type="number" class="textfield" name="Distance">
+        </mat-form-field>
+
+    </div>
+
+    <div class="row">
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <input [(ngModel)]="Description" matInput (keyup.enter)="Description=''" class="textfield"
+                name="Description">
+        </mat-form-field>
+
+    </div>
+
+    <div class="row">
+        <mat-form-field>
+            <mat-label>Time Interval (minutes)</mat-label>
+            <input [(ngModel)]="TimeIntervalMinutes" matInput type="number" (keyup.enter)="TimeIntervalMinutes=''" class="textfield"
+                name="TimeIntervalMinutes">
+        </mat-form-field>
+    </div>
+
+    <div class="row">
+        <mat-form-field>
+            <mat-label>Time Interval (seconds)</mat-label>
+            <input [(ngModel)]="TimeIntervalSeconds" matInput type="number" (keyup.enter)="TimeIntervalSeconds=''" class="textfield"
+                name="TimeIntervalSeconds">
+        </mat-form-field>
+
+    </div>
+
+    <button type="submit" mat-raised-button color="primary" (click)="addSet($event)"
+        [disabled]="Reps==='' || Distance==='' || Description==='' || TimeIntervalMinutes==='' || TimeIntervalSeconds===''">Add
+        Set</button>
+
+    <h4>Set List</h4>
+
+    <ul>
+        <li *ngFor="let set of setList; let i=index" style="height: 50px">
+            <!-- <input type="checkbox" class="checkbox" [(ngModel)]="todo.completed" /> -->
+            <span>{{ set.Reps }} x {{ set.Distance }} {{ set.Description}} on {{ set.TimeIntervalMinutes }}:{{ set.TimeIntervalSeconds }} </span>
+            <button mat-raised-button color="primary" (click)="deleteSet(i)">
+                    <mat-icon>delete</mat-icon>
+                </button>
+        </li>
+    </ul>
+
+    <h4>Yardage: {{yardage}}</h4>
+    <h4>Estimated Completion Time: {{completionTime}}</h4>
+
+    <div class="example-button-row">
+            <button mat-flat-button color="primary" type="submit" (click)="generateWorkout()">Create Workout</button>
+        </div>
+
+
+</mat-dialog-content>

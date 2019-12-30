@@ -12,6 +12,7 @@ export class DashboardComponent implements OnInit {
 
 showJU: boolean;
 showRPT: boolean;
+showTimeTracker: boolean;
 
   constructor(public dialog: MatDialog,
               private router: Router) {
@@ -29,6 +30,15 @@ showRPT: boolean;
   navigateToRPT()
   {
     this.router.navigate(['/race-pace-tracker']);
+  }
+
+  navigateToTimeTracker()
+  {
+    this.router.navigate(['/workout-time-tracker']);
+  }
+
+  toggleTimeTracker() {
+    this.showTimeTracker = ! this.showTimeTracker;
   }
 
   toggleRPT() {

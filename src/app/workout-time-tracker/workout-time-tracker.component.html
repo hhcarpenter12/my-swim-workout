@@ -1,0 +1,166 @@
+<router-outlet></router-outlet>
+
+
+<div align='center'>
+
+    <div class="containerPhoto"></div>
+
+    <article>
+        <header>
+            <h2>Workout Time Tracker</h2>
+        </header>
+    </article>
+
+    <button mat-raised-button color="primary" (click)="openDialog()">Add Workout</button>
+
+    <mat-divider style="height: 50px;"></mat-divider>
+
+    <div class="row" style="margin: auto;">
+        <label>Download file as CSV &nbsp;</label>
+        <button mat-raised-button color="primary" (click)="downloadFile()">
+            <mat-icon>cloud_download</mat-icon>
+        </button>
+
+        <label> &nbsp; Import CSV file &nbsp;</label>
+
+        <button mat-raised-button color="primary" (click)="fileInput.click()">
+            <mat-icon>cloud_upload</mat-icon>
+            <input #fileInput type="file" (change)="changeListener($event.target.files)" style="display:none;" />
+        </button>
+
+    </div>
+
+    <mat-divider style="height: 50px;"></mat-divider>
+
+    <div class="row">
+        <div class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
+
+                <ng-container matColumnDef="workoutName">
+                    <th mat-header-cell *matHeaderCellDef>Workout Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.workoutName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="yardage">
+                    <th mat-header-cell *matHeaderCellDef>Yardage</th>
+                    <td mat-cell *matCellDef="let element"> {{element.yardage}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="completionTime">
+                    <th mat-header-cell *matHeaderCellDef>Completion Time</th>
+                    <td mat-cell *matCellDef="let element"> {{element.completionTime}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="delete">
+                    <th mat-header-cell *matHeaderCellDef> Delete </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button color="primary" (click)="deleteRow(element)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+                        <div class="example-element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <div class="example-element-diagram">
+
+                                <h4>Workout Name</h4>
+
+                                <mat-form-field>
+                                    <mat-label>Name</mat-label>
+                                    <input [(ngModel)]="element.workoutName" matInput type="text">
+                                </mat-form-field>
+
+                                <h4>Add Set</h4>
+
+                                <div class="row">
+                                    <mat-form-field>
+                                        <mat-label>Reps</mat-label>
+                                        <input [(ngModel)]="Reps" matInput (keyup.enter)="Reps=''" type="number"
+                                            class="textfield" name="Reps">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="row">
+                                    <mat-form-field>
+                                        <mat-label>Distance</mat-label>
+                                        <input [(ngModel)]="Distance" matInput (keyup.enter)="Distance=''" type="number"
+                                            class="textfield" name="Distance">
+                                    </mat-form-field>
+
+                                </div>
+
+                                <div class="row">
+                                    <mat-form-field>
+                                        <mat-label>Description</mat-label>
+                                        <input [(ngModel)]="Description" matInput (keyup.enter)="Description=''"
+                                            class="textfield" name="Description">
+                                    </mat-form-field>
+
+                                </div>
+
+                                <div class="row">
+                                    <mat-form-field>
+                                        <mat-label>Time Interval (minutes)</mat-label>
+                                        <input [(ngModel)]="TimeIntervalMinutes" matInput type="number"
+                                            (keyup.enter)="TimeIntervalMinutes=''" class="textfield"
+                                            name="TimeIntervalMinutes">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="row">
+                                    <mat-form-field>
+                                        <mat-label>Time Interval (seconds)</mat-label>
+                                        <input [(ngModel)]="TimeIntervalSeconds" matInput type="number"
+                                            (keyup.enter)="TimeIntervalSeconds=''" class="textfield"
+                                            name="TimeIntervalSeconds">
+                                    </mat-form-field>
+
+                                </div>
+
+                                <button type="submit" mat-raised-button color="primary"
+                                    (click)="addSet($event, element.setList, element.yardage, element.completionTime, element)"
+                                    [disabled]="Reps==='' || Distance==='' || Description==='' || TimeIntervalMinutes==='' || TimeIntervalSeconds===''">Add
+                                    Set</button>
+
+                                <h4>Set List</h4>
+
+                                <ul>
+                                    <li *ngFor="let set of element.setList; let i=index" style="height: 50px">
+                                        <span>{{ set.Reps }} x {{ set.Distance }} {{ set.Description}} on
+                                            {{ set.TimeIntervalMinutes }}:{{ set.TimeIntervalSeconds }} </span>
+                                        <button mat-raised-button color="primary"
+                                            (click)="deleteSet(i, element.setList, element)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </li>
+                                </ul>
+
+                                <h4>Yardage: {{element.yardage}}</h4>
+                                <h4>Estimated Completion Time: {{element.completionTime}}</h4>
+
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+                    [class.example-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+            </table>
+
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+    </div>
+
+
+
+
+
+</div>

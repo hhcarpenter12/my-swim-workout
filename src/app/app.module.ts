@@ -17,12 +17,16 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { routingComponents } from './app-routing.module';
 import { UrbanchekAerobicDialog } from './urbanchek-aerobic/urbanchek-aerobic/urbanchek-aerobic-dialog';
+import { WorkoutTimeTrackerDialog } from './workout-time-tracker/workout-time-tracker-dialog/workout-time-tracker-dialog';
+import { WorkoutTimeTrackerRunnerDialog } from './workout-time-tracker/workout-time-tracker-runner-dialog/workout-time-tracker-runner-dialog';
 
 @NgModule({
   declarations: [
     routingComponents,
     RacePaceTrackerDialog,
-    UrbanchekAerobicDialog
+    UrbanchekAerobicDialog,
+    WorkoutTimeTrackerDialog,
+    WorkoutTimeTrackerRunnerDialog
   ],
   imports: [
     BrowserModule,
@@ -41,7 +45,7 @@ import { UrbanchekAerobicDialog } from './urbanchek-aerobic/urbanchek-aerobic/ur
 
   providers: [FormsModule],
   bootstrap: [AppComponent],
-  entryComponents: [RacePaceTrackerDialog, UrbanchekAerobicDialog]
+  entryComponents: [RacePaceTrackerDialog, UrbanchekAerobicDialog, WorkoutTimeTrackerDialog, WorkoutTimeTrackerRunnerDialog]
 })
 
 export class AppModule { }
