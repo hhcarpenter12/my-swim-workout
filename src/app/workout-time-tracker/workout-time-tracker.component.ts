@@ -41,6 +41,13 @@ export class WorkoutTimeTrackerComponent implements OnInit {
     ngOnInit() {
     }
 
+    deleteRow(row_obj) {
+        this.dataSource.data = this.dataSource.data.filter((value, key) => {
+    
+          return value.id != row_obj.id;
+        });
+      }
+
     openDialog(): void {
         const dialogRef = this.dialog.open(WorkoutTimeTrackerDialog, {
             width: '500px',
