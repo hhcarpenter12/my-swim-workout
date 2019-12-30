@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from "@angular/material";
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
     selector: 'workout-time-tracker-dialog',
@@ -19,6 +20,8 @@ export class WorkoutTimeTrackerDialog {
     completionTime: string;
     setList: any;
     todoObj: any;
+    nameControl = new FormControl("", [Validators.pattern('^[a-zA-Z0-9 ]+$')])
+    descControl = new FormControl("", [Validators.pattern('^[a-zA-Z0-9 ]+$')])
 
     constructor(public dialogRef: MatDialogRef<WorkoutTimeTrackerDialog>,
         @Inject(MAT_DIALOG_DATA) public tableData: any) {

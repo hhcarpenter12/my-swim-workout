@@ -4,7 +4,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { MatDialog } from '@angular/material/dialog';
 import { WorkoutTimeTrackerDialog } from './workout-time-tracker-dialog/workout-time-tracker-dialog';
 import { WorkoutTimeTrackerRunnerDialog } from './workout-time-tracker-runner-dialog/workout-time-tracker-runner-dialog';
-
+import { FormControl, Validators } from '@angular/forms';
 
 
 @Component({
@@ -34,6 +34,8 @@ export class WorkoutTimeTrackerComponent implements OnInit {
     expandedElement: Workout | null;
     dataSource = new MatTableDataSource<Workout>(ELEMENT_DATA);
     ourFile: any;
+    nameControl = new FormControl("", [Validators.pattern('^[a-zA-Z0-9 ]+$')])
+    descControl = new FormControl("", [Validators.pattern('^[a-zA-Z0-9 ]+$')])
 
     constructor(public dialog: MatDialog) {
     }
