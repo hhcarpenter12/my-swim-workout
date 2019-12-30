@@ -15,14 +15,14 @@
     <div class="row">
         <mat-form-field>
             <mat-label>Reps</mat-label>
-            <input [(ngModel)]="Reps" matInput type="number" class="textfield" name="Reps">
+            <input [(ngModel)]="Reps" matInput type="number" class="textfield" name="Reps" required>
         </mat-form-field>
     </div>
 
     <div class="row">
         <mat-form-field>
             <mat-label>Distance</mat-label>
-            <input [(ngModel)]="Distance" matInput  type="number" class="textfield" name="Distance">
+            <input [(ngModel)]="Distance" matInput  type="number" class="textfield" name="Distance" required>
         </mat-form-field>
 
     </div>
@@ -30,7 +30,7 @@
     <div class="row">
         <mat-form-field>
             <mat-label>Description</mat-label>
-            <input [(ngModel)]="Description" matInput class="textfield"
+            <input [(ngModel)]="Description" matInput class="textfield" required
                 name="Description">
         </mat-form-field>
 
@@ -39,7 +39,7 @@
     <div class="row">
         <mat-form-field>
             <mat-label>Time Interval (minutes)</mat-label>
-            <input [(ngModel)]="TimeIntervalMinutes" matInput type="number" class="textfield"
+            <input [(ngModel)]="TimeIntervalMinutes" matInput type="number" class="textfield" required
                 name="TimeIntervalMinutes">
         </mat-form-field>
     </div>
@@ -47,14 +47,14 @@
     <div class="row">
         <mat-form-field>
             <mat-label>Time Interval (seconds)</mat-label>
-            <input [(ngModel)]="TimeIntervalSeconds" matInput type="number" class="textfield"
+            <input [(ngModel)]="TimeIntervalSeconds" matInput type="number" class="textfield" required
                 name="TimeIntervalSeconds">
         </mat-form-field>
 
     </div>
 
     <button type="submit" mat-raised-button color="primary" (click)="addSet($event)"
-        [disabled]="Reps==0 || Distance==0 || Description==='' || TimeIntervalMinutes==0 || TimeIntervalSeconds==0">Add
+        [disabled]="Reps==0 || Distance==0 || Description==='' || TimeIntervalMinutes==undefined || TimeIntervalSeconds==undefined">Add
         Set</button>
 
     <h4>Set List</h4>

@@ -70,7 +70,7 @@
 
                                 <mat-form-field>
                                     <mat-label>Name</mat-label>
-                                    <input [(ngModel)]="element.workoutName" matInput type="text">
+                                    <input [(ngModel)]="element.workoutName" matInput type="text" required>
                                 </mat-form-field>
 
                                 <h4>Add Set</h4>
@@ -78,14 +78,14 @@
                                 <div class="row">
                                     <mat-form-field>
                                         <mat-label>Reps</mat-label>
-                                        <input [(ngModel)]="Reps" matInput type="number" class="textfield" name="Reps">
+                                        <input [(ngModel)]="Reps" matInput type="number" class="textfield" name="Reps" required>
                                     </mat-form-field>
                                 </div>
 
                                 <div class="row">
                                     <mat-form-field>
                                         <mat-label>Distance</mat-label>
-                                        <input [(ngModel)]="Distance" matInput type="number" class="textfield"
+                                        <input [(ngModel)]="Distance" matInput type="number" class="textfield" required
                                             name="Distance">
                                     </mat-form-field>
 
@@ -94,7 +94,7 @@
                                 <div class="row">
                                     <mat-form-field>
                                         <mat-label>Description</mat-label>
-                                        <input [(ngModel)]="Description" matInput class="textfield" name="Description">
+                                        <input [(ngModel)]="Description" matInput class="textfield" name="Description" required>
                                     </mat-form-field>
 
                                 </div>
@@ -102,7 +102,7 @@
                                 <div class="row">
                                     <mat-form-field>
                                         <mat-label>Time Interval (minutes)</mat-label>
-                                        <input [(ngModel)]="TimeIntervalMinutes" matInput type="number"
+                                        <input [(ngModel)]="TimeIntervalMinutes" matInput type="number" required
                                             class="textfield" name="TimeIntervalMinutes">
                                     </mat-form-field>
                                 </div>
@@ -110,7 +110,7 @@
                                 <div class="row">
                                     <mat-form-field>
                                         <mat-label>Time Interval (seconds)</mat-label>
-                                        <input [(ngModel)]="TimeIntervalSeconds" matInput type="number"
+                                        <input [(ngModel)]="TimeIntervalSeconds" matInput type="number" required
                                             class="textfield" name="TimeIntervalSeconds">
                                     </mat-form-field>
 
@@ -118,7 +118,7 @@
 
                                 <button type="submit" mat-raised-button color="primary"
                                     (click)="addSet($event, element.setList, element.yardage, element.completionTime, element)"
-                                    [disabled]="Reps==0 || Distance==0 || Description=='' || TimeIntervalMinutes==0 || TimeIntervalSeconds==0">Add
+                                    [disabled]="Reps==0 || Distance==0 || Description=='' || TimeIntervalMinutes==undefined || TimeIntervalSeconds==undefined">Add
                                     Set</button>
 
                                 <h4>Set List</h4>

@@ -43,10 +43,10 @@ export class WorkoutTimeTrackerComponent implements OnInit {
 
     deleteRow(row_obj) {
         this.dataSource.data = this.dataSource.data.filter((value, key) => {
-    
-          return value.id != row_obj.id;
+
+            return value.id != row_obj.id;
         });
-      }
+    }
 
     openDialog(): void {
         const dialogRef = this.dialog.open(WorkoutTimeTrackerDialog, {
@@ -160,97 +160,89 @@ export class WorkoutTimeTrackerComponent implements OnInit {
         let csv = data.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
         csv.unshift(header.join(','));
         let csvArray = csv.join('\r\n');
-    
+
         var a = document.createElement('a');
         var blob = new Blob([csvArray], { type: 'text/csv' }),
-          url = window.URL.createObjectURL(blob);
-    
+            url = window.URL.createObjectURL(blob);
+
         a.href = url;
         a.download = "workoutTimeTracker.csv";
         a.click();
         window.URL.revokeObjectURL(url);
         a.remove();
-      }
+    }
 
-      public changeListener(files: FileList) {
+    public changeListener(files: FileList) {
         if (files && files.length > 0) {
-          let file: File = files.item(0);
-          this.ourFile = file;
-          let reader: FileReader = new FileReader();
-          reader.readAsText(file);
-          reader.onload = (e) => {
-            let csv: string = reader.result as string;
-    
-            let csvRead = csv.split("\n");
-    
-    
-    
-    
-            for (let i = 1; i < csvRead.length; i++) {
-              let line = csvRead[i].split(',');
-    
-              let json = "";  
+            let file: File = files.item(0);
+            this.ourFile = file;
+            let reader: FileReader = new FileReader();
+            reader.readAsText(file);
+            reader.onload = (e) => {
+                let csv: string = reader.result as string;
+
+                let csvRead = csv.split("\n");
+
+                for (let i = 1; i < csvRead.length; i++) {
+                    let line = csvRead[i].split(',');
+
+                    let json = "";
 
 
-              console.log(line.length);
+                    for (let j = 4; j < line.length; j++) {
+                        json += line[j];
+                    }
 
-              for (let j = 4; j < line.length; j++)
-              {
-                json += line[j];
-              }  
 
-              
-              json = json.replace(/"Distance"/g, ",'Distance'");
-              json= json.replace(/"Description"/g, ",'Description'");
-              json = json.replace(/"TimeIntervalMinutes"/g, ",'TimeIntervalMinutes'")
-              json = json.replace(/"TimeIntervalSeconds"/g, ",'TimeIntervalSeconds'")
-              json = json.replace(/{"Reps"/g, ", {'Reps'")
-              json = json.replace(/'/g, '"');
-              json = json.replace("[", "[{")
-              json = json.replace("]", "}]")
-              json = json.replace("[{, ", "[{")
+                    json = json.replace(/"Distance"/g, ",'Distance'");
+                    json = json.replace(/"Description"/g, ",'Description'");
+                    json = json.replace(/"TimeIntervalMinutes"/g, ",'TimeIntervalMinutes'")
+                    json = json.replace(/"TimeIntervalSeconds"/g, ",'TimeIntervalSeconds'")
+                    json = json.replace(/{"Reps"/g, ", {'Reps'")
+                    json = json.replace(/'/g, '"');
+                    json = json.replace("[", "[{")
+                    json = json.replace("]", "}]")
+                    json = json.replace("[{, ", "[{")
 
-              let count = 0;
+                    let count = 0;
 
-              while (json.indexOf("set") != -1)
-              {
-                json = this.replaceAt(json, "set", count + "", json.indexOf("set"), json.indexOf("set") + 3)
-                count++;
-              }
+                    while (json.indexOf("set") != -1) {
+                        json = this.replaceAt(json, "set", count + "", json.indexOf("set"), json.indexOf("set") + 3)
+                        count++;
+                    }
 
-              let jArr = json.split(" ");
+                    let jArr = json.split(" ");
 
-              
-              let objArr = [];
 
-              for (let j of jArr)
-              {
-                j = j.replace("[", "");
-                j = j.replace("]", "");
-                j = j.replace('},', "}");
-                j = j.replace('{{', '{');
-                j = j.replace('}}', '}')
-                let set = JSON.parse(j);
+                    let objArr = [];
 
-                objArr.push(set);
-              }
+                    for (let j of jArr) {
+                        j = j.replace("[", "");
+                        j = j.replace("]", "");
+                        j = j.replace('},', "}");
+                        j = j.replace('{{', '{');
+                        j = j.replace('}}', '}')
+                        let set = JSON.parse(j);
 
-              let workout = {
-                id: Number.parseInt(line[0]),
-                workoutName: JSON.parse(line[1]),
-                completionTime: JSON.parse(line[2]),
-                yardage: JSON.parse(line[3]),
-                setList: objArr
-              }
-              
-              const data = this.dataSource.data;
-              data.push(workout);
-              this.dataSource.data = data;
+                        objArr.push(set);
+                    }
+
+                    let workout = {
+                        id: Number.parseInt(line[0]),
+                        workoutName: JSON.parse(line[1]),
+                        completionTime: JSON.parse(line[2]),
+                        yardage: JSON.parse(line[3]),
+                        setList: objArr
+                    }
+
+                    const data = this.dataSource.data;
+                    data.push(workout);
+                    this.dataSource.data = data;
+                }
             }
-          }
         }
-      }
-      
+    }
+
     replaceAt(input, search, replace, start, end) {
         return input.slice(0, start)
             + input.slice(start, end).replace(search, replace)
@@ -324,7 +316,7 @@ export class WorkoutTimeTrackerComponent implements OnInit {
 export interface Workout {
     id: number;
     workoutName: string;
-    setList: any [];
+    setList: any[];
 }
 
 const ELEMENT_DATA: Workout[] = [];
