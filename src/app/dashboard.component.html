@@ -11,18 +11,21 @@
   <mat-card class="example-card">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Workout Time Tracker</mat-card-title>
+      <mat-card-title>Workout Creator</mat-card-title>
     </mat-card-header>
-    
+
     <mat-card-content>
 
       <button mat-button (click)="toggleTimeTracker()">Details</button>
 
       <p *ngIf="showTimeTracker">
-        You can enter a swim workout that includes sets containing the distance, number of reps, description 
-        (free, kick, drill, ect) and time interval. After creating the workout, you can select 'Begin Workout'. 
-        When doing the workout, there will be a countdown timer showing how much time there is before the next
-        repetition or set, the current set, the upcomping set, and the percentage of the workout complete. 
+        You can enter a swim workout that includes sets containing the distance, number of reps, description
+        (free, kick, drill, ect) and time interval. The number of yardage and completion time will also be displayed.
+        After creating the workout, you can download the workouts as a CSV, then import them later on to view or edit
+        the workouts. In the future, there
+        will be a countdown timer feature showing how much time there is before the next repetition or set, the current
+        set, the upcomping set,
+        and the percentage of the workout complete.
       </p>
     </mat-card-content>
     <mat-card-actions>
@@ -32,14 +35,14 @@
     </mat-card-actions>
 
   </mat-card>
-    
+
 
   <mat-card class="example-card">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div>
       <mat-card-title>Race Pace Tracker</mat-card-title>
     </mat-card-header>
-    
+
     <mat-card-content>
 
       <button mat-button (click)="toggleRPT()">Details</button>
@@ -47,9 +50,12 @@
       <p *ngIf="showRPT">
         Based on your best time for your selected event, the app determines the target split for an entered distance.
         Then, the app converts that target split based on the pool configuration (short course yards, short course
-        meters, long course meters) in case the practice and competition pools have different configurations. The app also considers target splits
-        for individual medley (butterfly, backstroke, breaststroke, freestyle) events. Then, you can enter the number of repetitions, the amount of rest between each repetition, and the pace to hold
-        within each repetition. You can also import/export CSV files, so you can update personal bests and other information about the workout.
+        meters, long course meters) in case the practice and competition pools have different configurations. The app
+        also considers target splits
+        for individual medley (butterfly, backstroke, breaststroke, freestyle) events. Then, you can enter the number of
+        repetitions, the amount of rest between each repetition, and the pace to hold
+        within each repetition. You can also import/export CSV files, so you can update personal bests and other
+        information about the workout.
       </p>
     </mat-card-content>
     <mat-card-actions>
