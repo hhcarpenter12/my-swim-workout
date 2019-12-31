@@ -19,6 +19,7 @@ import { routingComponents } from './app-routing.module';
 import { UrbanchekAerobicDialog } from './urbanchek-aerobic/urbanchek-aerobic/urbanchek-aerobic-dialog';
 import { WorkoutTimeTrackerDialog } from './workout-time-tracker/workout-time-tracker-dialog/workout-time-tracker-dialog';
 import { WorkoutTimeTrackerRunnerDialog } from './workout-time-tracker/workout-time-tracker-runner-dialog/workout-time-tracker-runner-dialog';
+import { SplitTrackerDialog } from './split-tracker/split-tracker-dialog/split-tracker-dialog';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { WorkoutTimeTrackerRunnerDialog } from './workout-time-tracker/workout-t
     RacePaceTrackerDialog,
     UrbanchekAerobicDialog,
     WorkoutTimeTrackerDialog,
-    WorkoutTimeTrackerRunnerDialog
+    WorkoutTimeTrackerRunnerDialog,
+    SplitTrackerDialog
   ],
   imports: [
     BrowserModule,
@@ -45,7 +47,7 @@ import { WorkoutTimeTrackerRunnerDialog } from './workout-time-tracker/workout-t
 
   providers: [FormsModule],
   bootstrap: [AppComponent],
-  entryComponents: [RacePaceTrackerDialog, UrbanchekAerobicDialog, WorkoutTimeTrackerDialog, WorkoutTimeTrackerRunnerDialog]
+  entryComponents: [RacePaceTrackerDialog, UrbanchekAerobicDialog, WorkoutTimeTrackerDialog, WorkoutTimeTrackerRunnerDialog, SplitTrackerDialog]
 })
 
 export class AppModule { }

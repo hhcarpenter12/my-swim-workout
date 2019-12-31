@@ -13,6 +13,7 @@ export class DashboardComponent implements OnInit {
 showJU: boolean;
 showRPT: boolean;
 showTimeTracker: boolean;
+showSplitTracker: boolean;
 
   constructor(public dialog: MatDialog,
               private router: Router) {
@@ -27,6 +28,16 @@ showTimeTracker: boolean;
     this.router.navigate(['/urbanchek-aerobic']);
   }
   
+  navigateToSplitTracker()
+  {
+    this.router.navigate(['/split-tracker'])
+  }
+
+  toggleSplitTracker()
+  {
+    this.showSplitTracker = ! this.showSplitTracker;
+  }
+
   navigateToRPT()
   {
     this.router.navigate(['/race-pace-tracker']);

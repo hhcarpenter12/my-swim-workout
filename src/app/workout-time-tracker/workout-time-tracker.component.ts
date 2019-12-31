@@ -137,21 +137,22 @@ export class WorkoutTimeTrackerComponent implements OnInit {
             TimeIntervalSeconds: this.fixSeconds(this.TimeIntervalSeconds)
         }
 
-        setList.push(todoObj);
-
         this.getTotalSeconds(element);
 
-        this.getYardageDuration(todoObj, yardage, completionTime, element);
+        setList.push(todoObj);
+
+        this.getYardageDuration(todoObj, yardage, this.completionTimeSeconds, element);
 
         this.editWorkout(element);
 
         event.preventDefault();
     }
 
-    beginWorkout() {
-        const dialogRef = this.dialog.open(WorkoutTimeTrackerRunnerDialog, {
+    beginWorkout(passedId) {
+
+        this.dialog.open(WorkoutTimeTrackerRunnerDialog, {
             width: '500px',
-            data: { data: this.dataSource }
+            data: { data: this.dataSource, id: passedId.id }
         });
     }
 
@@ -206,17 +207,12 @@ export class WorkoutTimeTrackerComponent implements OnInit {
                     json = json.replace("]", "}]")
                     json = json.replace("[{, ", "[{")
 
-                    let count = 0;
 
-                    while (json.indexOf("set") != -1) {
-                        json = this.replaceAt(json, "set", count + "", json.indexOf("set"), json.indexOf("set") + 3)
-                        count++;
-                    }
-
-                    let jArr = json.split(" ");
-
+                    let jArr = json.split("}");
 
                     let objArr = [];
+
+                    let count = 0;
 
                     for (let j of jArr) {
                         j = j.replace("[", "");
@@ -224,9 +220,19 @@ export class WorkoutTimeTrackerComponent implements OnInit {
                         j = j.replace('},', "}");
                         j = j.replace('{{', '{');
                         j = j.replace('}}', '}')
-                        let set = JSON.parse(j);
+                        j = j.replace(', ', '')
 
-                        objArr.push(set);
+                        if (count < jArr.length) {
+                            j = j + "}";
+                        }
+
+                        count++;
+
+                        if (j != "}") {
+                            let set = JSON.parse(j);
+
+                            objArr.push(set);
+                        }
                     }
 
                     let workout = {

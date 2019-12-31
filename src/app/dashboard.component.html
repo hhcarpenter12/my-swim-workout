@@ -8,10 +8,36 @@
     </header>
   </article>
 
+  <!-- <mat-card class="example-card">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>Performance Analyzer</mat-card-title>
+      </mat-card-header>
+  
+      <mat-card-content>
+  
+        <button mat-button (click)="toggleSplitTracker()">Details</button>
+  
+        <p *ngIf="showSplitTracker">
+          You can enter the event, the split distance, and the time for each split. Then, the app will analyze
+          that performance by looking for the fastest, slowest, and average split times. The app will also display
+          a graph showing the pace throughout the race. You can also compare the charts against other swimmers or other
+          performances. If there are multiple swimmers in the same heat, you can keep track of them at once.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="navigateToSplitTracker()" routerLinkActive="active">
+          <mat-icon>keyboard_arrow_right</mat-icon>
+        </button>
+      </mat-card-actions>
+  
+    </mat-card> -->
+
+    
   <mat-card class="example-card">
     <mat-card-header>
       <div mat-card-avatar class="example-header-image"></div>
-      <mat-card-title>Workout Creator</mat-card-title>
+      <mat-card-title>Workout Time Tracker</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
@@ -22,10 +48,8 @@
         You can enter a swim workout that includes sets containing the distance, number of reps, description
         (free, kick, drill, ect) and time interval. The number of yardage and completion time will also be displayed.
         After creating the workout, you can download the workouts as a CSV, then import them later on to view or edit
-        the workouts. In the future, there
-        will be a countdown timer feature showing how much time there is before the next repetition or set, the current
-        set, the upcomping set,
-        and the percentage of the workout complete.
+        the workouts. There is also a countdown timer feature showing how much time there is before the next repetition or set, the current
+        set, the upcomping set, and the percentage of the workout complete. Select the workout you created and then select 'Begin Workout'. 
       </p>
     </mat-card-content>
     <mat-card-actions>
