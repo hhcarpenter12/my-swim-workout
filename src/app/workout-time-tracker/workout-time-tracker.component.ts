@@ -102,7 +102,7 @@ export class WorkoutTimeTrackerComponent implements OnInit {
 
         setList.push(todoObj);
 
-        this.getYardageDuration(todoObj, yardage, this.completionTimeSeconds, element);
+        this.getYardageDuration(todoObj, yardage, element);
 
         this.editWorkout(element);
 
@@ -251,7 +251,7 @@ export class WorkoutTimeTrackerComponent implements OnInit {
     }
 
 
-    getYardageDuration(todoObj, yardage, completionTime, element) {
+    getYardageDuration(todoObj, yardage, element) {
         for (let i = 0; i < todoObj.Reps; i++) {
 
             yardage += todoObj.Distance;
@@ -259,12 +259,13 @@ export class WorkoutTimeTrackerComponent implements OnInit {
             let totSecs = this.convertTimeUtility.determineSecondFormatting(todoObj.TimeIntervalMinutes, todoObj.TimeIntervalSeconds);
 
             this.completionTimeSeconds += totSecs;
-
-            completionTime = this.convertTimeUtility.convertTimeSec(totSecs);
         }
 
+        this.completionTime = this.convertTimeUtility.convertTimeSec(this.completionTimeSeconds);
+
         element.yardage = yardage;
-        element.completionTime = completionTime;
+        element.completionTime = this.completionTime;
+        console.log(element)
     }
 }
 

@@ -25,7 +25,7 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
     repNumber: number;
     setListCount = 0;
     yardsComplete: number;
-    i = 0;
+    setCount = 0;
     timeElapsed: number;
     timeElapsedString: string;
 
@@ -33,10 +33,7 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
         @Inject(MAT_DIALOG_DATA) public tableData: any,
         private convertTimeUtility: ConvertTimeUtilityComponent) {
 
-
-
     }
-
 
     ngOnInit() {
         this.completedSecsWorkout = 0;
@@ -45,10 +42,7 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
         for (let set of this.tableData.data.data[this.tableData.id].setList) {
 
             this.totalSecsWorkout += (this.convertTimeUtility.determineSecondFormatting(set.TimeIntervalMinutes, set.TimeIntervalSeconds) * set.Reps);
-            console.log(this.totalSecsWorkout)
         }
-
-        console.log(this.totalSecsWorkout)
 
         this.percentageComplete = ((this.completedSecsWorkout / this.totalSecsWorkout) * 100) + "%";
 
@@ -57,18 +51,23 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
     }
 
     goToNextRep(id) {
-        let set = this.tableData.data.data[id].setList;
+        let set = this.tableData.data.data[id].setList[this.setCount];
 
-        let totSecs = this.convertTimeUtility.determineSecondFormatting(set.TimeIntervalMinutes, set.TimeIntervalSeconds);
+        if (set != undefined &&
+            set.TimeIntervalMinutes != undefined &&
+            set.TimeIntervalSeconds != undefined) {
 
-        this.exSW = new Array<boolean>(totSecs);
-        this.countdown = totSecs;
-        this.timeElapsed = 0;
-        this.retrievedSW = true;
+            let totSecs = this.convertTimeUtility.determineSecondFormatting(set.TimeIntervalMinutes, set.TimeIntervalSeconds);
 
-        for (let i = 0; i < totSecs; i++) {
-            this.startCountdown(set[this.i])
-            this.timeoutCount += 1000;
+            this.exSW = new Array<boolean>(totSecs);
+            this.countdown = totSecs;
+            this.timeElapsed = 0;
+            this.retrievedSW = true;
+
+            for (let i = 0; i < totSecs; i++) {
+                this.startCountdown(set)
+                this.timeoutCount += 1000;
+            }
         }
     }
 
@@ -78,10 +77,10 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
 
         let set = this.tableData.data.data[id].setList;
 
-        let totSecs = this.convertTimeUtility.determineSecondFormatting(set[this.i].TimeIntervalMinutes, set[this.i].TimeIntervalSeconds);
+        let totSecs = this.convertTimeUtility.determineSecondFormatting(set[this.setCount].TimeIntervalMinutes, set[this.setCount].TimeIntervalSeconds);
 
         this.repNumber = 1;
-        this.currentSet = this.repNumber + " of " + set[this.i].Reps + " x " + set[this.i].Distance + " " + set[this.i].Description + " on " + set[this.i].TimeIntervalMinutes + ":" + set[this.i].TimeIntervalSeconds
+        this.currentSet = this.repNumber + " of " + set[this.setCount].Reps + " x " + set[this.setCount].Distance + " " + set[this.setCount].Description + " on " + set[this.setCount].TimeIntervalMinutes + ":" + set[this.setCount].TimeIntervalSeconds
 
         this.setListCount++;
 
@@ -99,7 +98,7 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
         this.timeElapsed = 0;
 
         for (let i = 0; i < totSecs; i++) {
-            this.startCountdown(set[this.i])
+            this.startCountdown(set[this.setCount])
             this.timeoutCount += 1000;
         }
     }
@@ -109,10 +108,18 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
     }
 
     endWorkout() {
-        if(confirm("Are you sure to end workout?")) {
-            this.dialogRef.close();   
+        if (confirm("Are you sure to end workout?")) {
+            this.dialogRef.close();
         }
     }
+
+    playNextRepAudio() {
+        let audio = new Audio();
+        audio.src = "http://www.wavsource.com/snds_2018-06-03_5106726768923853/sfx/buzzer_x.wav";
+        audio.load();
+        audio.play();
+    }
+
 
     startCountdown(set) {
 
@@ -141,25 +148,48 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
                 this.timeoutCount = 1000;
                 this.retrievedSW = false;
 
-                if (this.i < this.tableData.data.data[0].setList.length &&
+                if (this.setCount < this.tableData.data.data[0].setList.length &&
                     this.repNumber <= set.Reps) {
+
                     this.goToNextRep(this.tableData.id);
+                    this.playNextRepAudio();
                 }
-                else if (this.i < this.tableData.data.data[0].setList.length &&
+                else if (this.setCount < this.tableData.data.data[0].setList.length &&
                     this.repNumber > set.Reps) {
-                    this.i++;
-                    this.goToNextSet(this.tableData.id);
+
+                    this.setCount++;
+
+                    if (!this.setCount == this.tableData.data.data[0].setList.length) {
+                        this.goToNextSet(this.tableData.id);
+                        this.playNextRepAudio();
+                    }
+                    else {
+                        this.currentSet = "Nice job! Workout complete!";
+                        this.percentageComplete = "100%"
+                        this.playFinishedAuto();
+                    }
                 }
                 else {
                     this.currentSet = "Nice job! Workout complete!";
                     this.percentageComplete = "100%"
+                    this.playFinishedAuto();
                 }
             }
 
 
         }, this.timeoutCount);
     }
+
+    playFinishedAuto() {
+        let audio = new Audio();
+        audio.src = "http://www.wavsource.com/snds_2018-06-03_5106726768923853/sfx/applause2_x.wav";
+        audio.load();
+        audio.play();
+    }
 }
+
+
+
 
 export interface Workout {
     id: number;

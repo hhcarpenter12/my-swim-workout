@@ -65,19 +65,17 @@ export class ConvertTimeUtilityComponent {
         return fixedSeconds;
     }
 
-    determineSecondFormatting(min, sec) {
+    determineSecondFormatting(min, sec) {        
         let totSecs = (Number.parseInt(min) * 60);
 
-        if (sec.charAt(0) == '0') {
+        if (sec != null &&
+            sec.charAt(0) == '0' &&
+            sec.length > 0) {
             totSecs += Number.parseInt(sec.charAt(1));
         }
         else {
             totSecs += Number.parseInt(sec);
         }
-
-        console.log(min)
-        console.log(sec)
-        console.log(totSecs)
 
         return totSecs;
     }
