@@ -6,9 +6,9 @@
     <div class="row">
         <mat-form-field>
             <mat-label>Workout Name</mat-label>
-            <input [(ngModel)]="workoutName" [formControl]="nameControl" matInput type="text" required>
-        
-        <mat-error>Workout Name cannot contain special characters.</mat-error> 
+            <input [(ngModel)]="workoutName" matInput type="text" required>
+
+            <mat-error>Workout Name cannot contain special characters.</mat-error>
         </mat-form-field>
     </div>
 
@@ -24,7 +24,7 @@
     <div class="row">
         <mat-form-field>
             <mat-label>Distance</mat-label>
-            <input [(ngModel)]="Distance" matInput  type="number" class="textfield" name="Distance" required>
+            <input [(ngModel)]="Distance" matInput type="number" class="textfield" name="Distance" required>
         </mat-form-field>
 
     </div>
@@ -34,9 +34,9 @@
             <mat-label>Description</mat-label>
             <input [(ngModel)]="Description" [formControl]="descControl" matInput class="textfield" required
                 name="Description">
-                <mat-error>Description cannot contain special characters.</mat-error> 
-            
-            </mat-form-field>
+            <mat-error>Description cannot contain special characters.</mat-error>
+
+        </mat-form-field>
 
     </div>
 
@@ -57,19 +57,19 @@
 
     </div>
 
-    <button type="submit" mat-raised-button color="primary" (click)="addSet($event)"
-        [disabled]="workoutName===''|| Reps==0 || Distance==0 || Description==='' || TimeIntervalMinutes==undefined || TimeIntervalSeconds==undefined || nameControl.invalid || descControl.invalid">Add
+    <button type="submit" mat-raised-button color="primary" (click)="addSet()"
+        [disabled]="workoutName===''|| Reps==0 || Distance==0 || Description==='' || TimeIntervalMinutes==undefined || TimeIntervalSeconds==undefined || descControl.invalid">Add
         Set</button>
 
     <h4>Set List</h4>
 
     <ul>
         <li *ngFor="let set of setList; let i=index" style="height: 50px">
-            <!-- <input type="checkbox" class="checkbox" [(ngModel)]="todo.completed" /> -->
-            <span>{{ set.Reps }} x {{ set.Distance }} {{ set.Description}} on {{ set.TimeIntervalMinutes }}:{{ set.TimeIntervalSeconds }} </span>
+            <span>{{ set.Reps }} x {{ set.Distance }} {{ set.Description}} on
+                {{ set.TimeIntervalMinutes }}:{{ set.TimeIntervalSeconds }} </span>
             <button mat-raised-button color="primary" (click)="deleteSet(i)">
-                    <mat-icon>delete</mat-icon>
-                </button>
+                <mat-icon>delete</mat-icon>
+            </button>
         </li>
     </ul>
 
@@ -77,8 +77,8 @@
     <h4>Estimated Completion Time: {{completionTime}}</h4>
 
     <div class="example-button-row">
-            <button mat-flat-button color="primary" type="submit" (click)="generateWorkout()">Create Workout</button>
-        </div>
+        <button mat-flat-button color="primary" type="submit" (click)="generateWorkout()">Create Workout</button>
+    </div>
 
 
 </mat-dialog-content>

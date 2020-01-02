@@ -20,10 +20,14 @@ import { UrbanchekAerobicDialog } from './urbanchek-aerobic/urbanchek-aerobic/ur
 import { WorkoutTimeTrackerDialog } from './workout-time-tracker/workout-time-tracker-dialog/workout-time-tracker-dialog';
 import { WorkoutTimeTrackerRunnerDialog } from './workout-time-tracker/workout-time-tracker-runner-dialog/workout-time-tracker-runner-dialog';
 import { SplitTrackerDialog } from './split-tracker/split-tracker-dialog/split-tracker-dialog';
+import { ConvertTimeUtilityComponent } from './convertTimeUtility.component';
+import { DivisorUtilityComponent } from './divisorUtility.component';
 
 @NgModule({
   declarations: [
     routingComponents,
+    ConvertTimeUtilityComponent,
+    DivisorUtilityComponent,
     RacePaceTrackerDialog,
     UrbanchekAerobicDialog,
     WorkoutTimeTrackerDialog,
@@ -45,7 +49,7 @@ import { SplitTrackerDialog } from './split-tracker/split-tracker-dialog/split-t
     AppRoutingModule, HttpClientModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule
   ],
 
-  providers: [FormsModule],
+  providers: [FormsModule, ConvertTimeUtilityComponent, DivisorUtilityComponent],
   bootstrap: [AppComponent],
   entryComponents: [RacePaceTrackerDialog, UrbanchekAerobicDialog, WorkoutTimeTrackerDialog, WorkoutTimeTrackerRunnerDialog, SplitTrackerDialog]
 })

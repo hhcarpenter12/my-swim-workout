@@ -70,7 +70,7 @@
 
                                 <mat-form-field>
                                     <mat-label>Name</mat-label>
-                                    <input [(ngModel)]="element.workoutName" matInput type="text" [formControl]="nameControl" required>
+                                    <input [(ngModel)]="element.workoutName" matInput type="text" required>
 
                                     <mat-error>Workout Name cannot contain special characters.</mat-error>
                                 </mat-form-field>
@@ -121,10 +121,8 @@
                                 </div>
 
                                 <button type="submit" mat-raised-button color="primary"
-                                    (click)="addSet($event, element.setList, element.yardage, element.completionTime, element)"
-                                    [disabled]="Reps==0 || Distance==0 || Description=='' || TimeIntervalMinutes==undefined || TimeIntervalSeconds==undefined || nameControl.invalid || descControl.invalid">Add
+                                    (click)="addSet($event, element.setList, element.yardage, element.completionTime, element)" [disabled]="Reps==0 || Distance==0 || Description=='' || TimeIntervalMinutes==undefined || TimeIntervalSeconds==undefined || descControl.invalid">Add
                                     Set</button>
-
                                 <h4>Set List</h4>
 
                                 <ul>

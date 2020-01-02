@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { WorkoutTimeTrackerDialog } from './workout-time-tracker-dialog/workout-time-tracker-dialog';
 import { WorkoutTimeTrackerRunnerDialog } from './workout-time-tracker-runner-dialog/workout-time-tracker-runner-dialog';
 import { FormControl, Validators } from '@angular/forms';
+import { ConvertTimeUtilityComponent } from '../convertTimeUtility.component';
 
 
 @Component({
@@ -34,10 +35,11 @@ export class WorkoutTimeTrackerComponent implements OnInit {
     expandedElement: Workout | null;
     dataSource = new MatTableDataSource<Workout>(ELEMENT_DATA);
     ourFile: any;
-    nameControl = new FormControl("", [Validators.pattern('^[a-zA-Z0-9 ]+$')])
+    // nameControl = new FormControl("", [Validators.pattern('^[a-zA-Z0-9 ]+$')])
     descControl = new FormControl("", [Validators.pattern('^[a-zA-Z0-9 ]+$')])
 
-    constructor(public dialog: MatDialog) {
+    constructor(public dialog: MatDialog,
+        private convertTimeUtility: ConvertTimeUtilityComponent) {
     }
 
     ngOnInit() {
@@ -63,20 +65,6 @@ export class WorkoutTimeTrackerComponent implements OnInit {
         });
     }
 
-    fixSeconds(passedSeconds) {
-        let fixedSeconds = "";
-
-        if (passedSeconds <= 9 &&
-            passedSeconds >= 0) {
-            fixedSeconds = "0" + passedSeconds;
-        }
-        else {
-            fixedSeconds = passedSeconds + "";
-        }
-
-        return fixedSeconds;
-    }
-
     deleteSet(index, setList, element) {
         this.getTotalSeconds(element);
 
@@ -88,17 +76,10 @@ export class WorkoutTimeTrackerComponent implements OnInit {
 
                     element.yardage -= todoObj.Distance;
 
-                    let totSecs = (Number.parseInt(todoObj.TimeIntervalMinutes) * 60);
-
-                    if (todoObj.TimeIntervalSeconds.charAt(0) == '0') {
-                        totSecs += Number.parseInt(todoObj.TimeIntervalSeconds.charAt(1));
-                    }
-                    else {
-                        totSecs += Number.parseInt(todoObj.TimeIntervalSeconds);
-                    }
+                    let totSecs = this.convertTimeUtility.determineSecondFormatting(todoObj.TimeIntervalMinutes, todoObj.TimeIntervalSeconds);
 
                     this.completionTimeSeconds -= totSecs;
-                    element.completionTime = this.convertTimeToMinutesSeconds(this.completionTimeSeconds);
+                    element.completionTime = this.convertTimeUtility.convertTimeSec(this.completionTimeSeconds);
                 }
             }
         }
@@ -108,33 +89,13 @@ export class WorkoutTimeTrackerComponent implements OnInit {
         this.editWorkout(element);
     }
 
-    convertTimeToMinutesSeconds(seconds) {
-        var h = Math.floor(seconds / 3600)
-        var m = Math.floor(seconds % 3600 / 60);
-        var s = Math.round(((seconds % 3600 % 60) * 100)) / 100;
-
-        let formattedSeconds = s + "";
-
-        if (s < 10) {
-            formattedSeconds = "0" + s;
-        }
-
-        let formattedMinutes = m + "";
-
-        if (m < 10) {
-            formattedMinutes = "0" + m;
-        }
-
-        return h + ":" + formattedMinutes + ":" + formattedSeconds;
-    }
-
     addSet(event, setList, yardage, completionTime, element) {
         let todoObj = {
             Reps: this.Reps,
             Distance: this.Distance,
             Description: this.Description,
             TimeIntervalMinutes: this.TimeIntervalMinutes,
-            TimeIntervalSeconds: this.fixSeconds(this.TimeIntervalSeconds)
+            TimeIntervalSeconds: this.convertTimeUtility.fixSeconds(this.TimeIntervalSeconds)
         }
 
         this.getTotalSeconds(element);
@@ -151,7 +112,10 @@ export class WorkoutTimeTrackerComponent implements OnInit {
     beginWorkout(passedId) {
 
         this.dialog.open(WorkoutTimeTrackerRunnerDialog, {
-            width: '500px',
+            width: '100vw',
+            maxWidth: '100vw',
+            height: '100%',
+            maxHeight: '100%',
             data: { data: this.dataSource, id: passedId.id }
         });
     }
@@ -279,14 +243,7 @@ export class WorkoutTimeTrackerComponent implements OnInit {
 
         for (let set of element.setList) {
             for (let i = 0; i < set.Reps; i++) {
-                let totSecs = (Number.parseInt(set.TimeIntervalMinutes) * 60);
-
-                if (set.TimeIntervalSeconds.charAt(0) == '0') {
-                    totSecs += Number.parseInt(set.TimeIntervalSeconds.charAt(1));
-                }
-                else {
-                    totSecs += Number.parseInt(set.TimeIntervalSeconds);
-                }
+                let totSecs = this.convertTimeUtility.determineSecondFormatting(set.TimeIntervalMinutes, set.TimeIntervalSeconds);
 
                 this.completionTimeSeconds += totSecs;
             }
@@ -295,25 +252,15 @@ export class WorkoutTimeTrackerComponent implements OnInit {
 
 
     getYardageDuration(todoObj, yardage, completionTime, element) {
-
-
-
         for (let i = 0; i < todoObj.Reps; i++) {
 
             yardage += todoObj.Distance;
 
-            let totSecs = (Number.parseInt(todoObj.TimeIntervalMinutes) * 60);
-
-            if (todoObj.TimeIntervalSeconds.charAt(0) == '0') {
-                totSecs += Number.parseInt(todoObj.TimeIntervalSeconds.charAt(1));
-            }
-            else {
-                totSecs += Number.parseInt(todoObj.TimeIntervalSeconds);
-            }
+            let totSecs = this.convertTimeUtility.determineSecondFormatting(todoObj.TimeIntervalMinutes, todoObj.TimeIntervalSeconds);
 
             this.completionTimeSeconds += totSecs;
 
-            completionTime = this.convertTimeToMinutesSeconds(this.completionTimeSeconds);
+            completionTime = this.convertTimeUtility.convertTimeSec(totSecs);
         }
 
         element.yardage = yardage;

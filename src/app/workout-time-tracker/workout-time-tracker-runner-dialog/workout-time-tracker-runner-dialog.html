@@ -1,8 +1,29 @@
 <mat-dialog-content>
 
-    <h2>Current Set: {{currentSet}} </h2>
-    <h2>Time Left: {{countdown}}</h2>
-    <h2>Next Set: {{nextSet}}</h2>
-    <h2>Percentage Complete: {{percentageComplete}}</h2>
+    <div align='center'>
+
+        <h1 style=font-size:30px>Current Set: {{currentSet}} </h1>
+        <h1 style=font-size:30px>Interval Time Left: {{countdownString}}</h1>
+        <h1 style=font-size:30px>Interval Elapsed Time: {{timeElapsedString}}</h1>
+        <h1 style=font-size:20px>Next Set: {{nextSet}}</h1>
+        <h1 style=font-size:20px>Percentage Complete: {{percentageComplete}}</h1>
+
+        <div class="row" style="margin: auto; padding-bottom: 20px;">
+            <button mat-raised-button color="primary" (click)="pauseWorkout()">
+                <mat-icon style="height:80px !important;
+        width:80px !important;
+        font-size:80px !important;" *ngIf="workoutPausedSW">play_circle_outline</mat-icon>
+                <mat-icon style="height:80px !important;
+        width:80px !important;
+        font-size:80px !important;" *ngIf="! workoutPausedSW">pause_circle_outline</mat-icon>
+            </button>
+        </div>
+
+        <div class="row">
+            <button style="height:40px !important;
+                width:250px !important;
+                font-size:30px !important;" mat-raised-button color="warn" (click)="endWorkout()">End Workout</button>
+        </div>
+    </div>
 
 </mat-dialog-content>

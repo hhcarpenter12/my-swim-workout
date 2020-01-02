@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from "@angular/material";
 import { FormControl, Validators } from '@angular/forms';
+import { ConvertTimeUtilityComponent } from 'src/app/convertTimeUtility.component';
 
 @Component({
     selector: 'workout-time-tracker-dialog',
@@ -8,7 +9,7 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class WorkoutTimeTrackerDialog {
 
-    workoutName: string;
+    workoutName = "";
     Reps: number;
     Distance: number;
     Description: string;
@@ -20,11 +21,12 @@ export class WorkoutTimeTrackerDialog {
     completionTime: string;
     setList: any;
     todoObj: any;
-    nameControl = new FormControl("", [Validators.pattern('^[a-zA-Z0-9 ]+$')])
+    // nameControl = new FormControl("", [Validators.pattern('^[a-zA-Z0-9 ]+$')])
     descControl = new FormControl("", [Validators.pattern('^[a-zA-Z0-9 ]+$')])
 
     constructor(public dialogRef: MatDialogRef<WorkoutTimeTrackerDialog>,
-        @Inject(MAT_DIALOG_DATA) public tableData: any) {
+        @Inject(MAT_DIALOG_DATA) public tableData: any,
+        private convertTimeUtility: ConvertTimeUtilityComponent) {
         this.yardage = 0;
         this.Reps = 0;
         this.Distance = 0;
@@ -36,20 +38,6 @@ export class WorkoutTimeTrackerDialog {
         this.setList = [];
     }
 
-    fixSeconds() {
-        let fixedSeconds = "";
-
-        if (this.TimeIntervalSeconds <= 9 &&
-            this.TimeIntervalSeconds >= 0) {
-            fixedSeconds = "0" + this.TimeIntervalSeconds;
-        }
-        else {
-            fixedSeconds = this.TimeIntervalSeconds + "";
-        }
-
-        return fixedSeconds;
-    }
-
     deleteSet(index) {
         for (let i = 0; i < this.setList.length; i++) {
             if (i == index) {
@@ -59,17 +47,10 @@ export class WorkoutTimeTrackerDialog {
 
                     this.yardage -= todoObj.Distance;
 
-                    let totSecs = (Number.parseInt(todoObj.TimeIntervalMinutes) * 60);
-
-                    if (todoObj.TimeIntervalSeconds.charAt(0) == '0') {
-                        totSecs += Number.parseInt(todoObj.TimeIntervalSeconds.charAt(1));
-                    }
-                    else {
-                        totSecs += Number.parseInt(todoObj.TimeIntervalSeconds);
-                    }
+                    let totSecs = this.convertTimeUtility.determineSecondFormatting(todoObj.TimeIntervalMinutes, todoObj.TimeIntervalSeconds);
 
                     this.completionTimeSeconds -= totSecs;
-                    this.completionTime = this.convertTimeToMinutesSeconds(this.completionTimeSeconds);
+                    this.completionTime = this.convertTimeUtility.convertTimeSec(this.completionTimeSeconds)
                 }
             }
         }
@@ -82,8 +63,8 @@ export class WorkoutTimeTrackerDialog {
         let id = 0;
 
         if (this.tableData.data != undefined &&
-            this.tableData.data.data != undefined) {
-            id = this.tableData.data.data.length;
+          this.tableData.data.data != undefined) {
+          id = this.tableData.data.data.length;
         }
 
         let workout = {
@@ -95,6 +76,8 @@ export class WorkoutTimeTrackerDialog {
         }
 
         const myData = this.tableData.data.data;
+        console.log(myData)
+
 
         myData.push(workout);
         this.tableData.data.data = myData;
@@ -106,55 +89,25 @@ export class WorkoutTimeTrackerDialog {
 
             this.yardage += todoObj.Distance;
 
-            let totSecs = (Number.parseInt(todoObj.TimeIntervalMinutes) * 60);
-
-            if (todoObj.TimeIntervalSeconds.charAt(0) == '0') {
-                totSecs += Number.parseInt(todoObj.TimeIntervalSeconds.charAt(1));
-            }
-            else {
-                totSecs += Number.parseInt(todoObj.TimeIntervalSeconds);
-            }
+            let totSecs = this.convertTimeUtility.determineSecondFormatting(todoObj.TimeIntervalMinutes, todoObj.TimeIntervalSeconds);
 
             this.completionTimeSeconds += totSecs;
 
-            this.completionTime = this.convertTimeToMinutesSeconds(this.completionTimeSeconds);
+            this.completionTime = this.convertTimeUtility.convertTimeSec(this.completionTimeSeconds);
         }
     }
 
-    convertTimeToMinutesSeconds(seconds) {
-        var h = Math.floor(seconds / 3600)
-        var m = Math.floor(seconds % 3600 / 60);
-        var s = Math.round(((seconds % 3600 % 60) * 100)) / 100;
-
-        let formattedSeconds = s + "";
-
-        if (s < 10) {
-            formattedSeconds = "0" + s;
-        }
-
-        let formattedMinutes = m + "";
-
-        if (m < 10)
-        {
-            formattedMinutes = "0" + m;
-        }
-
-
-        return  h + ":" + formattedMinutes + ":" + formattedSeconds;
-    }
-
-    addSet(event) {
+    addSet() {
         this.todoObj = {
             Reps: this.Reps,
             Distance: this.Distance,
             Description: this.Description,
             TimeIntervalMinutes: this.TimeIntervalMinutes,
-            TimeIntervalSeconds: this.fixSeconds()
+            TimeIntervalSeconds: this.convertTimeUtility.fixSeconds(this.TimeIntervalSeconds)
         }
 
         this.setList.push(this.todoObj);
         this.getYardageDuration(this.todoObj);
-        event.preventDefault();
     }
 }
 

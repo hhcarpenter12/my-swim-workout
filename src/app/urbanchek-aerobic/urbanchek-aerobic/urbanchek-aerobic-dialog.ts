@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from "@angular/material";
 import { FormControl, Validators } from '@angular/forms';
+import { ConvertTimeUtilityComponent } from 'src/app/convertTimeUtility.component';
+import { DivisorUtilityComponent } from 'src/app/divisorUtility.component';
 
 
 @Component({
@@ -10,7 +12,9 @@ import { FormControl, Validators } from '@angular/forms';
 export class UrbanchekAerobicDialog {
 
   constructor(public dialogRef: MatDialogRef<UrbanchekAerobicDialog>,
-    @Inject(MAT_DIALOG_DATA) public tableData: any) {
+    @Inject(MAT_DIALOG_DATA) public tableData: any,
+    private convertTimeUtility: ConvertTimeUtilityComponent,
+    private findDivisorUtility: DivisorUtilityComponent) {
 
   }
 
@@ -28,8 +32,8 @@ export class UrbanchekAerobicDialog {
   reps = 10;
   restString: string;
   rest = 30;
-  targetMinutesInterval: number;
-  targetSecondsInterval: number;
+  targetMinutesInterval = 0;
+  targetSecondsInterval = 0;
   personalRecord: string;
   WHITE50 = 0.467272727;
   PINK50 = 0.450649351;
@@ -81,25 +85,15 @@ export class UrbanchekAerobicDialog {
   convertRestTime(targetMinutesInterval, targetSecondsInterval): string {
     let totalSeconds = (targetMinutesInterval * 60) + targetSecondsInterval;
 
-    var m = Math.floor(totalSeconds % 3600 / 60);
-    var s = Math.round(((totalSeconds % 3600 % 60) * 100)) / 100;
-
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    return m + ":" + formattedSeconds + " Interval";
+    return this.convertTimeUtility.convertTimeSec(totalSeconds);
   }
 
   generateWorkout() {
     this.restString = "";
 
-    let divisor = this.findDivisor(this.timeTrialDistance, this.distance);
+    let divisor = this.findDivisorUtility.findDivisor(this.timeTrialDistance, this.distance);
 
     this.finalTargetTime = this.findTargetTime(divisor, this.minutesBest, this.secondsBest);
-
 
     let id = 0;
 
@@ -233,86 +227,28 @@ export class UrbanchekAerobicDialog {
       this.purple = baseTime / this.PURPLE500;
     }
 
-    this.whiteString = this.convertTime(this.white);
-    this.pinkString = this.convertTime(this.pink)
-    this.redString = this.convertTime(this.red);
-    this.blueString = this.convertTime(this.blue);
-    this.purpleString = this.convertTime(this.purple);
-  }
-
-  convertTime(inputSeconds) {
-    var m = Math.floor(inputSeconds % 3600 / 60);
-    var s = Math.round(((inputSeconds % 3600 % 60) * 100)) / 100;
-
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    return m + ":" + formattedSeconds;
-  }
-
-  findDivisor(timeTrialDistance, tempDistance): number {
-    let divisor = 0;
-
-    if (timeTrialDistance == 200) {
-      divisor = 200 / tempDistance;
-    }
-    else if (timeTrialDistance == 300) {
-      divisor = 300 / tempDistance;
-    }
-    else if (timeTrialDistance == 400) {
-      divisor = 400 / tempDistance;
-    }
-    else if (timeTrialDistance == 500) {
-      divisor = 500 / tempDistance;
-    }
-    else if (timeTrialDistance == 2000) {
-      divisor = 2000 / tempDistance;
-    }
-
-    return divisor;
+    this.whiteString = this.convertTimeUtility.convertTimeSec(this.white);
+    this.pinkString = this.convertTimeUtility.convertTimeSec(this.pink);
+    this.redString = this.convertTimeUtility.convertTimeSec(this.red);
+    this.blueString = this.convertTimeUtility.convertTimeSec(this.blue);
+    this.purpleString = this.convertTimeUtility.convertTimeSec(this.purple);
   }
 
   findTargetTime(divisor, minutesBest, secondsBest): string {
-    let targetTime = "";
 
     let targetTimeInit = (((minutesBest * 60) + secondsBest) / divisor);
 
-    this.convertOtherTime(minutesBest, secondsBest);
+    this.personalRecord = this.convertTimeUtility.convertTimeSec(targetTimeInit);
 
     let m = Math.floor(targetTimeInit % 3600 / 60);
     let s = Math.round(((targetTimeInit % 3600 % 60) * 100)) / 100;
 
     this.determineEffortLevel(m, s)
 
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    targetTime = m + ":" + formattedSeconds;
-
-    return targetTime;
+    return this.convertTimeUtility.convertTimeMinSec(m, s);
   }
 
-  convertOtherTime(minutesBest, secondsBest) {
-
-    let totalSeconds = (minutesBest * 60) + secondsBest;
-
-    var m = Math.floor(totalSeconds % 3600 / 60);
-    var s = Math.round(((totalSeconds % 3600 % 60) * 100)) / 100;
-
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    this.personalRecord = m + ":" + formattedSeconds;
-  }
+ 
 
   save() {
     this.dialogRef.close({ data: this.tableData });

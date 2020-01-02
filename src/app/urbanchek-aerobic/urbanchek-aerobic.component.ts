@@ -5,6 +5,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { UrbanchekAerobicDialog } from './urbanchek-aerobic/urbanchek-aerobic-dialog';
+import { ConvertTimeUtilityComponent } from '../convertTimeUtility.component';
+import { DivisorUtilityComponent } from '../divisorUtility.component';
 
 @Component({
   selector: 'urbanchek-aerobic',
@@ -21,7 +23,9 @@ import { UrbanchekAerobicDialog } from './urbanchek-aerobic/urbanchek-aerobic-di
 export class AerobicTrainingComponent implements OnInit {
 
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog,
+              private convertTimeUtility: ConvertTimeUtilityComponent,
+              private findDivisorUtility: DivisorUtilityComponent) {
   }
 
   columnsToDisplay = ['swimmerName', 'reps', 'distance', 'effort', 'delete'];
@@ -42,8 +46,8 @@ export class AerobicTrainingComponent implements OnInit {
   reps = 0;
   restString: string;
   rest = 0;
-  targetMinutesInterval: number;
-  targetSecondsInterval: number;
+  targetMinutesInterval = 0;
+  targetSecondsInterval = 0;
   personalRecord: string;
   flySplitMinutes = 0;
   flySplitSeconds = 0;
@@ -152,59 +156,6 @@ export class AerobicTrainingComponent implements OnInit {
     this.bestIMTim = m + ":" + formattedSeconds;
   }
 
-  convertOtherTime(minutesBest, secondsBest) {
-
-    let totalSeconds = (minutesBest * 60) + secondsBest;
-
-    var m = Math.floor(totalSeconds % 3600 / 60);
-    var s = Math.round(((totalSeconds % 3600 % 60) * 100)) / 100;
-
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    this.personalRecord = m + ":" + formattedSeconds;
-  }
-
-  convertRestTime(targetMinutesInterval, targetSecondsInterval): string {
-    let totalSeconds = (targetMinutesInterval * 60) + targetSecondsInterval;
-
-    var m = Math.floor(totalSeconds % 3600 / 60);
-    var s = Math.round(((totalSeconds % 3600 % 60) * 100)) / 100;
-
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    return m + ":" + formattedSeconds + " Interval";
-  }
-
-  findDivisor(timeTrialDistance, tempDistance): number {
-    let divisor = 0;
-
-    if (timeTrialDistance == 200) {
-      divisor = 200 / tempDistance;
-    }
-    else if (timeTrialDistance == 300) {
-      divisor = 300 / tempDistance;
-    }
-    else if (timeTrialDistance == 400) {
-      divisor = 400 / tempDistance;
-    }
-    else if (timeTrialDistance == 500) {
-      divisor = 500 / tempDistance;
-    }
-    else if (timeTrialDistance == 2000) {
-      divisor = 2000 / tempDistance;
-    }
-
-    return divisor;
-  }
-
   determineEffortLevel(timeTrialDistance, minutes, seconds, distance, white, pink, red, blue, purple, effort) {
     let totalSeconds = (minutes * 60) + seconds;
 
@@ -284,30 +235,16 @@ export class AerobicTrainingComponent implements OnInit {
       purple = baseTime / this.PURPLE500;
     }
 
-    this.whiteString = this.convertTime(white);
-    this.pinkString = this.convertTime(pink)
-    this.redString = this.convertTime(red);
-    this.blueString = this.convertTime(blue);
-    this.purpleString = this.convertTime(purple);
-  }
-
-  convertTime(inputSeconds) {
-    var m = Math.floor(inputSeconds % 3600 / 60);
-    var s = Math.round(((inputSeconds % 3600 % 60) * 100)) / 100;
-
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    return m + ":" + formattedSeconds;
+    this.whiteString = this.convertTimeUtility.convertTimeSec(white);
+    this.pinkString = this.convertTimeUtility.convertTimeSec(pink)
+    this.redString = this.convertTimeUtility.convertTimeSec(red);
+    this.blueString = this.convertTimeUtility.convertTimeSec(blue);
+    this.purpleString = this.convertTimeUtility.convertTimeSec(purple);
   }
 
   findTargetTime(divisor, minutesBest, secondsBest, splitDistance, timeTrialDistance, white, pink, red, blue, purple, effort): string {
-    let targetTime = "";
 
-    this.convertOtherTime(minutesBest, secondsBest);
+    this.personalRecord = this.convertTimeUtility.convertTimeMinSec(minutesBest, secondsBest);
 
     let targetTimeInit = (((minutesBest * 60) + secondsBest) / divisor);
 
@@ -316,20 +253,12 @@ export class AerobicTrainingComponent implements OnInit {
 
     this.determineEffortLevel(timeTrialDistance, m, s, splitDistance, white, pink, red, blue, purple, effort)
 
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    targetTime = m + ":" + formattedSeconds;
-
-    return targetTime;
+    return this.convertTimeUtility.convertTimeMinSec(m, s);
   }
 
   editWorkout(element) {
 
-    let divisor = this.findDivisor(element.timeTrialDistance, element.distance);
+    let divisor = this.findDivisorUtility.findDivisor(element.timeTrialDistance, element.distance);
 
     this.finalTargetTime = this.findTargetTime(divisor, element.minutesBest,
       element.secondsBest, element.distance, element.timeTrialDistance,
@@ -341,7 +270,7 @@ export class AerobicTrainingComponent implements OnInit {
       element.targetSecondsInterval != null &&
       !Number.isNaN(element.targetMinutesInterval) &&
       !Number.isNaN(element.targetSecondsInterval)) {
-      this.restString = this.convertRestTime(element.targetMinutesInterval, element.targetSecondsInterval);
+      this.restString = this.convertTimeUtility.convertTimeMinSec(element.targetMinutesInterval, element.targetSecondsInterval);
     } else {
       this.restString = element.rest + " seconds";
     }

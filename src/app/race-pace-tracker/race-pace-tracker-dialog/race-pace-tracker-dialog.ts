@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from "@angular/material";
 import { FormControl, Validators } from '@angular/forms';
+import { ConvertTimeUtilityComponent } from 'src/app/convertTimeUtility.component';
+import { DivisorUtilityComponent } from 'src/app/divisorUtility.component';
 
 
 @Component({
@@ -10,7 +12,9 @@ import { FormControl, Validators } from '@angular/forms';
 export class RacePaceTrackerDialog {
 
   constructor(public dialogRef: MatDialogRef<RacePaceTrackerDialog>,
-    @Inject(MAT_DIALOG_DATA) public tableData: any) {
+    @Inject(MAT_DIALOG_DATA) public tableData: any,
+    private convertTimeUtility: ConvertTimeUtilityComponent,
+    private findDivisorUtility: DivisorUtilityComponent) {
 
   }
 
@@ -85,7 +89,7 @@ export class RacePaceTrackerDialog {
   generateWorkout() {
     this.restString = "";
 
-    let divisor = this.findDivisor(this.eventFocus, this.distance);
+    let divisor = this.findDivisorUtility.findDivisorIM(this.eventFocus, this.distance);
 
     if (this.isIM) {
 
@@ -109,7 +113,7 @@ export class RacePaceTrackerDialog {
 
     if (this.targetMinutesInterval != null &&
       this.targetSecondsInterval != null) {
-      this.restString = this.convertRestTime(this.targetMinutesInterval, this.targetSecondsInterval);
+      this.restString = this.convertTimeUtility.convertTimeMinSec(this.targetMinutesInterval, this.targetSecondsInterval);
     } else {
       this.restString = this.rest + " seconds";
     }
@@ -161,114 +165,16 @@ export class RacePaceTrackerDialog {
     this.dialogRef.close();
   }
 
-  convertRestTime(targetMinutesInterval, targetSecondsInterval): string {
-    let totalSeconds = (targetMinutesInterval * 60) + targetSecondsInterval;
-
-    var m = Math.floor(totalSeconds % 3600 / 60);
-    var s = Math.round(((totalSeconds % 3600 % 60) * 100)) / 100;
-
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    return m + ":" + formattedSeconds + " Interval";
-  }
-
-  convertOtherTime(minutesBest, secondsBest) {
-
-    let totalSeconds = (minutesBest * 60) + secondsBest;
-
-    var m = Math.floor(totalSeconds % 3600 / 60);
-    var s = Math.round(((totalSeconds % 3600 % 60) * 100)) / 100;
-
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    this.personalRecord = m + ":" + formattedSeconds;
-  }
-
-  findDivisor(eventFocus, tempDistance): number {
-    let divisor = 0;
-
-    if (eventFocus == this.Free200 ||
-      eventFocus == this.Fly200 ||
-      eventFocus == this.Back200 ||
-      eventFocus == this.Breast200) {
-      divisor = 200 / tempDistance;
-    }
-    else if (eventFocus == this.Free100 ||
-      eventFocus == this.Back100 ||
-      eventFocus == this.Breast100 ||
-      eventFocus == this.Fly100) {
-      divisor = 100 / tempDistance;
-    }
-    else if (eventFocus == this.Free50 ||
-      eventFocus == this.Back50 ||
-      eventFocus == this.Breast50 ||
-      eventFocus == this.Fly50) {
-      divisor = 50 / tempDistance;
-    }
-    else if (eventFocus == this.Free400) {
-      divisor = 400 / tempDistance;
-    }
-    else if (eventFocus == this.Free500) {
-      divisor = 500 / tempDistance;
-    }
-    else if (eventFocus == this.Free800) {
-      divisor = 800 / tempDistance;
-    }
-    else if (eventFocus == this.Free1000) {
-      divisor = 1000 / tempDistance;
-    }
-    else if (eventFocus == this.Free1500) {
-      divisor = 1500 / tempDistance;
-    }
-    else if (eventFocus == this.Free1650) {
-      divisor = 1650 / tempDistance;
-    }
-
-    if (eventFocus == this.IM100) {
-      if (tempDistance == 25) {
-        divisor = 1;
-      }
-    } else if (eventFocus == this.IM200) {
-      if (tempDistance == 25) {
-        divisor = 2;
-      } else if (tempDistance == 50) {
-        divisor = 1;
-      }
-    } else if (eventFocus == this.IM400) {
-      divisor = 100 / tempDistance;
-    }
-
-    return divisor;
-  }
   findTargetTime(divisor, holdWithinPR, minutesBest, secondsBest, eventDistanceType, splitDistanceType, splitDistance): string {
     let targetTime = "";
 
-    this.convertOtherTime(minutesBest, secondsBest);
-
+    this.personalRecord = this.convertTimeUtility.convertTimeMinSec(minutesBest, secondsBest);
+    
     let targetTimeInit = (((minutesBest * 60) + secondsBest) / divisor) + holdWithinPR;
 
     targetTimeInit = this.convertDistanceTime(eventDistanceType, splitDistanceType, targetTimeInit, splitDistance);
 
-    var m = Math.floor(targetTimeInit % 3600 / 60);
-    var s = Math.round(((targetTimeInit % 3600 % 60) * 100)) / 100;
-
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    targetTime = m + ":" + formattedSeconds;
-
-    return targetTime;
+    return this.convertTimeUtility.convertTimeSec(targetTimeInit);
   }
 
   convertDistanceTime(eventDistanceType, splitDistanceType, eventBestTime, splitDistance) {
@@ -348,16 +254,7 @@ export class RacePaceTrackerDialog {
       (breastSplitMinutes * 60) + breastSplitSeconds +
       (freeSplitMinutes * 60) + freeSplitSeconds;
 
-    let m = Math.floor(totalSeconds % 3600 / 60);
-    let s = Math.round(((totalSeconds % 3600 % 60) * 100)) / 100;
-
-    let formattedSeconds = s + "";
-
-    if (s < 10) {
-      formattedSeconds = "0" + s;
-    }
-
-    this.bestIMTim = m + ":" + formattedSeconds;
+    this.bestIMTim = this.convertTimeUtility.convertTimeSec(totalSeconds);
   }
 }
 
