@@ -2,11 +2,11 @@
 
     <div align='center'>
 
-        <h1>Current Set: {{currentSet}} </h1>
-        <h1>Interval Time Left: {{countdownString}}</h1>
-        <h1>Interval Elapsed Time: {{timeElapsedString}}</h1>
-        <h1>Next Set: {{nextSet}}</h1>
-        <h1>Percentage Complete: {{percentageComplete}}</h1>
+        <h1>{{currentSet}} </h1>
+        <!-- <h1>{{countdownString}}</h1> -->
+        <h1>{{timeElapsedString}}</h1>
+        <h2>Next: {{nextSet}}</h2>
+        <h2>Percentage Complete: {{percentageComplete}}</h2>
 
         <div class="row" style="margin: auto; padding-bottom: 20px;">
             <button mat-raised-button color="primary" (click)="pauseWorkout()">
@@ -14,6 +14,14 @@
                 <mat-icon *ngIf="! workoutPausedSW">pause_circle_outline</mat-icon>
             </button>
         </div>
+
+        <audio #audioOption2>
+                <source src='http://www.wavsource.com/snds_2018-06-03_5106726768923853/sfx/applause2_x.wav' type="audio/wav">
+            </audio>
+
+        <audio #audioOption>
+                <source src='http://www.wavsource.com/snds_2018-06-03_5106726768923853/sfx/buzzer_x.wav' type="audio/wav">
+            </audio>
 
         <div class="row">
             <button mat-raised-button color="warn" (click)="endWorkout()">End Workout</button>

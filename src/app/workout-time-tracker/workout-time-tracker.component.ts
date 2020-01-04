@@ -265,7 +265,6 @@ export class WorkoutTimeTrackerComponent implements OnInit {
 
         element.yardage = yardage;
         element.completionTime = this.completionTime;
-        console.log(element)
     }
 }
 

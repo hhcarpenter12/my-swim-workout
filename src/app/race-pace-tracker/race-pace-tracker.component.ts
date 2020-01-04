@@ -221,8 +221,7 @@ export class RacePaceTrackerComponent implements OnInit {
     }
 
     const data = this.dataSource.data;
-    
-    console.log(id)
+
     data[id] = workout;
     this.dataSource.data = data;
   }

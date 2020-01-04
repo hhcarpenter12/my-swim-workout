@@ -76,8 +76,6 @@ export class WorkoutTimeTrackerDialog {
         }
 
         const myData = this.tableData.data.data;
-        console.log(myData)
-
 
         myData.push(workout);
         this.tableData.data.data = myData;

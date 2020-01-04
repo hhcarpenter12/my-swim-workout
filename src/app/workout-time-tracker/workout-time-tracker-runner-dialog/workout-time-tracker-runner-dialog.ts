@@ -1,6 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTableDataSource } from "@angular/material";
 import { ConvertTimeUtilityComponent } from 'src/app/convertTimeUtility.component';
+
 
 @Component({
     selector: 'workout-time-tracker-runner-dialog',
@@ -29,11 +30,16 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
     timeElapsed: number;
     timeElapsedString: string;
 
+    
+
     constructor(public dialogRef: MatDialogRef<WorkoutTimeTrackerRunnerDialog>,
         @Inject(MAT_DIALOG_DATA) public tableData: any,
         private convertTimeUtility: ConvertTimeUtilityComponent) {
 
     }
+
+    @ViewChild('audioOption', {static: false}) audioPlayerRef: ElementRef;
+    @ViewChild('audioOption2', {static: false}) audioPlayerRef2: ElementRef;
 
     ngOnInit() {
         this.completedSecsWorkout = 0;
@@ -46,12 +52,14 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
 
         this.percentageComplete = ((this.completedSecsWorkout / this.totalSecsWorkout) * 100) + "%";
 
-        this.goToNextSet(this.tableData.id);
-
+        this.goToNextSet(this.tableData.id, this.tableData.data.data[this.tableData.id].setList.length);
     }
 
     goToNextRep(id) {
-        let set = this.tableData.data.data[id].setList[this.setCount];
+        
+        let setLength = this.tableData.data.data[id].setList.length;
+        
+        let set = this.tableData.data.data[id].setList[this.setCount - 1];    
 
         if (set != undefined &&
             set.TimeIntervalMinutes != undefined &&
@@ -65,42 +73,44 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
             this.retrievedSW = true;
 
             for (let i = 0; i < totSecs; i++) {
-                this.startCountdown(set)
+                this.startCountdown(set, setLength)
                 this.timeoutCount += 1000;
             }
         }
     }
 
-
-    goToNextSet(id) {
+    goToNextSet(id, setListLength) {
         this.timeoutCount = 1000;
 
-        let set = this.tableData.data.data[id].setList;
+            let set = this.tableData.data.data[id].setList;
+            let setLength = this.tableData.data.data[id].setList.length;
+            
+            let totSecs = this.convertTimeUtility.determineSecondFormatting(set[this.setCount].TimeIntervalMinutes, set[this.setCount].TimeIntervalSeconds);
 
-        let totSecs = this.convertTimeUtility.determineSecondFormatting(set[this.setCount].TimeIntervalMinutes, set[this.setCount].TimeIntervalSeconds);
+            this.repNumber = 1;
+            this.currentSet = this.repNumber + " of " + set[this.setCount].Reps + " x " + set[this.setCount].Distance + " " + set[this.setCount].Description + " on " + set[this.setCount].TimeIntervalMinutes + ":" + set[this.setCount].TimeIntervalSeconds
 
-        this.repNumber = 1;
-        this.currentSet = this.repNumber + " of " + set[this.setCount].Reps + " x " + set[this.setCount].Distance + " " + set[this.setCount].Description + " on " + set[this.setCount].TimeIntervalMinutes + ":" + set[this.setCount].TimeIntervalSeconds
+            this.setListCount++;
 
-        this.setListCount++;
+            if (this.setListCount < this.tableData.data.data[0].setList.length) {
+                let nSet = this.tableData.data.data[id].setList[this.setListCount]
 
-        if (this.setListCount < this.tableData.data.data[0].setList.length) {
-            let nSet = this.tableData.data.data[0].setList[this.setListCount]
+                this.nextSet = nSet.Reps + " x " + nSet.Distance + " " + nSet.Description + " on " + nSet.TimeIntervalMinutes + ":" + nSet.TimeIntervalSeconds
+            }
+            else {
+                this.nextSet = "Nice job! Workout complete!"
+            }
 
-            this.nextSet = nSet.Reps + " x " + nSet.Distance + " " + nSet.Description + " on " + nSet.TimeIntervalMinutes + ":" + nSet.TimeIntervalSeconds
-        }
-        else {
-            this.nextSet = "Nice job! Workout complete!"
-        }
+            this.exSW = new Array<boolean>(totSecs);
+            this.countdown = totSecs;
+            this.timeElapsed = 0;
 
-        this.exSW = new Array<boolean>(totSecs);
-        this.countdown = totSecs;
-        this.timeElapsed = 0;
+            for (let i = 0; i < totSecs; i++) {
+                this.startCountdown(set[this.setCount], setLength)
+                this.timeoutCount += 1000;
+            }
 
-        for (let i = 0; i < totSecs; i++) {
-            this.startCountdown(set[this.setCount])
-            this.timeoutCount += 1000;
-        }
+            this.setCount++;
     }
 
     pauseWorkout() {
@@ -114,14 +124,10 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
     }
 
     playNextRepAudio() {
-        let audio = new Audio();
-        audio.src = "http://www.wavsource.com/snds_2018-06-03_5106726768923853/sfx/buzzer_x.wav";
-        audio.load();
-        audio.play();
+        this.audioPlayerRef.nativeElement.play();
     }
 
-
-    startCountdown(set) {
+    startCountdown(set, setLength) {
 
         this.exSW[this.countdown] = false;
 
@@ -143,33 +149,26 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
                 this.repNumber++;
                 this.currentSet = this.repNumber + " of " + set.Reps + " x " + set.Distance + " " + set.Description + " on " + set.TimeIntervalMinutes + ":" + set.TimeIntervalSeconds
                 this.yardsComplete += set.Distance;
-
+                
 
                 this.timeoutCount = 1000;
                 this.retrievedSW = false;
 
-                if (this.setCount < this.tableData.data.data[0].setList.length &&
-                    this.repNumber <= set.Reps) {
+                console.log(this.repNumber)
 
-                    this.goToNextRep(this.tableData.id);
+                if (this.setCount <= setLength &&
+                    this.repNumber <= set.Reps)  {
+
                     this.playNextRepAudio();
+                    this.goToNextRep(this.tableData.id);
                 }
-                else if (this.setCount < this.tableData.data.data[0].setList.length &&
+                else if (this.setCount < setLength &&
                     this.repNumber > set.Reps) {
 
-                    this.setCount++;
-
-                    if (!this.setCount == this.tableData.data.data[0].setList.length) {
-                        this.goToNextSet(this.tableData.id);
                         this.playNextRepAudio();
-                    }
-                    else {
-                        this.currentSet = "Nice job! Workout complete!";
-                        this.percentageComplete = "100%"
-                        this.playFinishedAuto();
-                    }
+                        this.goToNextSet(this.tableData.id, setLength);
                 }
-                else {
+                else if (this.setCount >= setLength) {
                     this.currentSet = "Nice job! Workout complete!";
                     this.percentageComplete = "100%"
                     this.playFinishedAuto();
@@ -181,10 +180,7 @@ export class WorkoutTimeTrackerRunnerDialog implements OnInit {
     }
 
     playFinishedAuto() {
-        let audio = new Audio();
-        audio.src = "http://www.wavsource.com/snds_2018-06-03_5106726768923853/sfx/applause2_x.wav";
-        audio.load();
-        audio.play();
+        this.audioPlayerRef2.nativeElement.play();
     }
 }
 
